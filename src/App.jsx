@@ -1,0 +1,1 @@
+export default function App(){return(<div style={{color:'white',background:'black',minHeight:'100vh'}}><h1>zk</h1></div>)}
