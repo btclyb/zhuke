@@ -8,12 +8,12 @@ export default function Portfolio() {
 
   const t = {
     zh: {
-      subtitle: "Web3 投机 / 空投玩家",
+      subtitle: "Web3 投机 / 空投",
       about: "实战玩家，专注二级市场、空投策略、DeFi。",
       email: "邮箱",
     },
     en: {
-      subtitle: "Web3 Investor / Airdrop Hunter",
+      subtitle: "Web3 Investor / Airdrop",
       about: "Hands-on player focusing on secondary market, airdrops and DeFi.",
       email: "Email",
     },
