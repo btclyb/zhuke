@@ -1,78 +1,210 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Mail } from "lucide-react";
+import avatar from "./assets/avatar.png";
 
 export default function Portfolio() {
   const [lang, setLang] = useState("zh");
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [theme, setTheme] = useState("dark");
+
+  const t = {
+    zh: {
+      subtitle: "Web3 投机 / 空投",
+      edition: "（破产版）",
+      tagline: "那场暴跌带走了我的梦",
+      about: "实战玩家，专注二级市场、空投策略、DeFi。",
+      email: "邮箱",
+    },
+    en: {
+      subtitle: "Web3 Investor / Airdrop",
+      edition: "(Bankrupt ver.)",
+      tagline: "That crash took away my dream",
+      about: "Hands-on player focusing on secondary market, airdrops and DeFi.",
+      email: "Email",
+    },
+  };
+
+  const L = t[lang];
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+    if (theme === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  }, [theme]);
 
   return (
-    <div 
-      className="min-h-screen bg-gradient-to-br from-amber-50 via-rose-50 to-indigo-50 p-4 sm:p-8 lg:p-16 xl:p-24 font-sans overflow-hidden relative"
-      style={{
-        backgroundImage: `radial-gradient(circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.15) 0%, transparent 50%)`,
-      }}
+    <main
+      className={`relative min-h-screen ${
+        theme === "dark"
+          ? "bg-black text-white"
+          : "bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900"
+      } flex items-center justify-center px-6 py-20 transition-colors duration-300`}
     >
-      {/* 3D 浮动装饰 - 简化版 */}
-      <div className="fixed top-16 left-12 w-28 h-28 bg-gradient-to-br from-amber-400/80 via-orange-400/80 to-rose-400/80 backdrop-blur-xl border-4 border-white/70 rounded-3xl shadow-2xl flex items-center justify-center z-20 rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-700 hover:-translate-y-2">
-        <span className="text-4xl font-black text-white drop-shadow-2xl">💻</span>
-      </div>
-      
-      <div className="fixed top-40 right-20 w-24 h-24 bg-gradient-to-br from-emerald-400/80 via-teal-400/80 to-cyan-400/80 backdrop-blur-xl border-4 border-white/70 rounded-2xl shadow-2xl flex items-center justify-center z-20 -rotate-8 hover:rotate-0 hover:scale-125 transition-all duration-700 hover:-translate-y-2">
-        <span className="text-3xl text-white drop-shadow-xl">📈</span>
-      </div>
+      {/* Tech Background - only dark mode */}
+      {theme === "dark" && (
+        <>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.25),transparent)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-20"
+            style={{
+              backgroundImage:
+                "url('https://grainy-gradients.vercel.app/noise.svg')",
+            }}
+          />
+        </>
+      )}
 
-      {/* 语言切换按钮 */}
-      <button 
-        className="fixed top-6 right-8 text-sm bg-white/90 backdrop-blur-xl border-2 border-black/10 px-6 py-3 rounded-2xl hover:bg-black/95 hover:text-white hover:border-white/50 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl font-medium z-50 text-gray-800"
-        onClick={() => setLang(lang === "zh" ? "en" : "zh")}
-      >
-        {lang === "zh" ? "🇺🇸 EN" : "🇨🇳 中文"}
-      </button>
-
-      {/* 主标题 */}
-      <div className="relative z-30 max-w-6xl mx-auto text-center pt-28 pb-40">
-        <h1 
-          className="text-[clamp(4.5rem,16vw,15rem)] font-black bg-gradient-to-r from-slate-900 via-gray-900 to-slate-900 bg-clip-text text-transparent mb-12 lg:mb-20 drop-shadow-4xl leading-none tracking-[-0.05em]"
-          style={{
-            transform: `translate(${((mousePos.x / window.innerWidth) - 0.5) * 8}px, ${((mousePos.y / window.innerHeight) - 0.5) * 6}px)`
-          }}
+      {/* Controls */}
+      <div className="absolute top-6 right-6 flex gap-2">
+        <button
+          className={`text-xs px-3 py-1 rounded-md border transition-all ${
+            theme === "dark"
+              ? "border-white/20 bg-white/10 hover:bg-white/20"
+              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm"
+          }`}
+          onClick={() => setLang(lang === "zh" ? "en" : "zh")}
+          whileTap={{ scale: 0.95 }}
         >
-          WEB3投机空投
-        </h1>
-
-        {/* 标签 */}
-        <div className="mb-20 lg:mb-32">
-          <h2 className="inline-block text-3xl lg:text-5xl xl:text-6xl font-black uppercase tracking-[0.25em] bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 bg-clip-text text-transparent drop-shadow-xl rotate-[-0.5deg] hover:rotate-0 transition-all duration-500">
-            实战玩家
-          </h2>
-          <div className="text-xl lg:text-2xl font-bold text-slate-600 uppercase tracking-wider opacity-80 mt-4 rotate-[0.5deg]">
-            （破产版）
+          {lang === "zh" ? "EN" : "中文"}
+        </button>
+        <button
+          className={`text-xs px-3 py-1 rounded-md border transition-all ${
+            theme === "dark"
+              ? "border-white/20 bg-white/10 hover:bg-white/20"
+              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm"
+          }`}
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          whileTap={{ scale: 0.95 }}
+        >
+          {theme === "dark" ? "☀️" : "🌙"}
+        </button>
+      </div>
+    
+      <div className="relative z-10 max-w-2xl w-full text-center space-y-10">
+        {/* Avatar + Subtitle */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="flex justify-center mb-4">
+            <motion.img
+              src={avatar}
+              alt="avatar"
+              className={`w-36 h-36 rounded-full object-cover hover:scale-105 transition-transform ${
+                theme === "dark"
+                  ? "shadow-[0_0_25px_rgba(168,85,247,0.7)]"
+                  : "shadow-lg shadow-gray-300/50"
+              }`}
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.6 }}
+            />
           </div>
+    
+          <motion.p
+            className="text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            {L.subtitle}
+            <span className={`ml-2 text-sm ${
+              theme === "dark" ? "opacity-60" : "text-gray-500"
+            }`}>
+              {L.edition}
+            </span>
+          </motion.p>
+    
+          <motion.p
+            className={`mt-2 text-sm ${
+              theme === "dark" ? "opacity-60" : "text-gray-500"
+            }`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+          >
+            {L.tagline}
+          </motion.p>
+        </motion.div>
+    
+        <div className="grid gap-10 text-left">
+          {/* About */}
+          <motion.section
+            className={`border rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300 ${
+              theme === "dark"
+                ? "bg-white/5 border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+                : "bg-white/80 border-gray-200 shadow-lg backdrop-blur-sm"
+            }`}
+            whileHover={{ y: -4 }}
+          >
+            <h2 className={`text-xl font-semibold mb-2 ${
+              theme === "dark" ? "" : "text-gray-800"
+            }`}>
+              About
+            </h2>
+            <p className={`leading-relaxed ${
+              theme === "dark" 
+                ? "opacity-80" 
+                : "text-gray-700"
+            }`}>
+              {L.about}
+            </p>
+          </motion.section>
+    
+          {/* Airdrop List */}
+          <motion.section
+            className={`border rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300 ${
+              theme === "dark"
+                ? "bg-white/5 border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+                : "bg-white/80 border-gray-200 shadow-lg backdrop-blur-sm"
+            }`}
+            whileHover={{ y: -4 }}
+          >
+            <ul className={`space-y-1 list-disc list-inside ${
+              theme === "dark" 
+                ? "opacity-90" 
+                : "text-gray-800"
+            }`}>
+              <li>2022 OP Airdrop ✅</li>
+              <li>2023 ARB Airdrop ✅</li>
+              <li>2024 ZKS Airdrop ❌</li>
+              <li>2025 Linea Airdrop ✅</li>
+            </ul>
+          </motion.section>
+    
+          {/* Contact */}
+          <section className="py-6 text-center">
+            <a
+              href="mailto:kk@zhuke.ggff.net"
+              className={`inline-flex items-center gap-2 text-lg transition-all hover:scale-105 ${
+                theme === "dark"
+                  ? "text-purple-200 hover:text-purple-300"
+                  : "text-purple-600 hover:text-purple-700"
+              }`}
+              whileHover={{ scale: 1.05 }}
+            >
+              <Mail size={18} />
+              kk@zhuke.ggff.net
+              <span className={`text-sm ${
+                theme === "dark" ? "opacity-70" : "text-gray-500"
+              }`}>
+                ↗
+              </span>
+            </a>
+          </section>
         </div>
+    
+        <footer className={`pt-4 text-sm text-center ${
+          theme === "dark" ? "opacity-60" : "text-gray-500"
+        }`}>
+          少即是多，信息本质就是优势。
+        </footer>
+      </div>
+    </main>
 
-        {/* 双卡片 */}
-        <div className="grid xl:grid-cols-2 gap-12 xl:gap-20 mb-32 lg:mb-40 max-w-7xl mx-auto">
-          {/* 战绩卡 */}
-          <div className="group bg-gradient-to-br from-emerald-50/95 via-green-50/95 to-teal-50/95 backdrop-blur-2xl border-4 border-white/80 shadow-2xl rounded-[2.5rem] p-10 lg:p-14 xl:p-16 hover:shadow-emerald-500/25 hover:shadow-4xl transform rotate-[2deg] hover:rotate-0 hover:scale-[1.025] hover:border-emerald-300/80 transition-all duration-800 hover:-translate-y-2 overflow-hidden">
-            <h3 className="text-3xl lg:text-4xl xl:text-5xl font-black bg-gradient-to-r from-emerald-900 to-slate-900 bg-clip-text text-transparent mb-10 lg:mb-12 drop-shadow-2xl group-hover:scale-105 transition-all duration-500">
-              空投战绩
-            </h3>
-            <ul className="text-xl lg:text-2xl xl:text-3xl space-y-5 text-slate-800 leading-relaxed max-w-lg mx-auto">
-              <li className="group-hover:translate-x-3 transition-transform duration-400 flex items-center gap-4 hover:text-emerald-900">
-                <div className="w-4 h-4 lg:w-5 lg:h-5 bg-emerald-500 rounded-full shadow-lg scale-110 group-hover:scale-125 transition-all duration-300" />
-                <span>2022 OP Airdrop</span>
-                <span className="text-emerald-600 font-black text-2xl lg:text-3xl ml-auto drop-shadow-md scale-110">✅</span>
-              </li>
-              <li className="group-hover:translate-x-3 transition-transform duration-400 flex items-center gap-4 hover:text-emerald-900">
-                <div className="w-4 h-4 lg:w-5 lg:h-5 bg-emerald-500 rounded-full shadow-lg scale-110 group-hover:scale-125 transition-all duration-300" />
-                <span>2023 ARB Airdrop</span>
-                <span className="text-emerald-600 font-black text-2xl lg:text-3xl ml-auto drop-shadow-md scale-110">✅</span>
-              </li>
-              <li className="group-hover:translate-x-3 transition-transform duration-400 flex
+  );
+}
