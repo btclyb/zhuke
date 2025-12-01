@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { Mail, Twitter, MessageCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { Mail } from "lucide-react";
 import avatar from "./assets/avatar.png";
 
 export default function Portfolio() {
@@ -19,10 +19,6 @@ export default function Portfolio() {
         hits: "命中率",
         totalNum: "8",
         hitRate: "75%"
-      },
-      social: {
-        twitter: "Twitter 交易记录",
-        discord: "Discord 讨论"
       }
     },
     en: {
@@ -36,10 +32,6 @@ export default function Portfolio() {
         hits: "Hit Rate",
         totalNum: "8",
         hitRate: "75%"
-      },
-      social: {
-        twitter: "Twitter Records",
-        discord: "Discord Chat"
       }
     },
   };
@@ -136,22 +128,12 @@ export default function Portfolio() {
             className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300"
             whileHover={{ y: -4 }}
           >
-            <ul className="opacity-90 space-y-1 list-disc list-inside mb-3">
+            <ul className="opacity-90 space-y-1 list-disc list-inside">
               <li>2022 OP Airdrop ✅</li>
               <li>2023 ARB Airdrop ✅</li>
               <li>2024 ZKS Airdrop ❌</li>
               <li>2025 Linea Airdrop ✅</li>
             </ul>
-            <div className="flex gap-4 text-xs opacity-70">
-              <a href="https://twitter.com/yourhandle" className="flex items-center gap-1 hover:underline">
-                <Twitter size={14} />
-                {L.social.twitter}
-              </a>
-              <a href="https://discord.gg/yourserver" className="flex items-center gap-1 hover:underline">
-                <MessageCircle size={14} />
-                {L.social.discord}
-              </a>
-            </div>
           </motion.section>
 
           {/* Contact */}
