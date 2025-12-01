@@ -9,13 +9,13 @@ export default function Portfolio() {
   const t = {
     zh: {
       subtitle: "Web3 投机 / 空投",
-      tagline: "那场暴跌带走了我的梦。",
+      tagline: "那场暴跌带走了我的梦",
       about: "实战玩家，专注二级市场、空投策略、DeFi。",
       email: "邮箱",
     },
     en: {
       subtitle: "Web3 Investor / Airdrop",
-      tagline: "That crash took away my dream.",
+      tagline: "That crash took away my dream",
       about: "Hands-on player focusing on secondary market, airdrops and DeFi.",
       email: "Email",
     },
