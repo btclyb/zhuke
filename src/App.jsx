@@ -8,13 +8,13 @@ export default function Portfolio() {
 
   const t = {
     zh: {
-      subtitle: "Web3 投机 / 空投（破产版）",
+      subtitle: "Web3 投机 / 空投",
       tagline: "那场暴跌带走了我的梦。",
       about: "实战玩家，专注二级市场、空投策略、DeFi。",
       email: "邮箱",
     },
     en: {
-      subtitle: "Web3 Investor / Airdrop（Bankruptcy version）",
+      subtitle: "Web3 Investor / Airdrop",
       tagline: "That crash took away my dream.",
       about: "Hands-on player focusing on secondary market, airdrops and DeFi.",
       email: "Email",
@@ -66,6 +66,16 @@ export default function Portfolio() {
             transition={{ delay: 0.4, duration: 0.8 }}
           >
             {L.subtitle}
+            <span className="ml-2 text-sm opacity-60">（破产版）</span>
+          </motion.p>
+
+          <motion.p
+            className="mt-2 text-sm opacity-60"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+          >
+            {L.tagline}
           </motion.p>
         </motion.div>
 
@@ -93,7 +103,7 @@ export default function Portfolio() {
               className="inline-flex items-center gap-2 text-lg text-purple-200 hover:text-purple-300 transition"
             >
               <Mail size={18} />
-              kk@zhuke.ggff.net
+              [kk@zhuke.ggff.net](mailto:kk@zhuke.ggff.net)
               <span className="text-sm opacity-70">↗</span>
             </a>
           </section>
