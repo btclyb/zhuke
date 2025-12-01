@@ -11,15 +11,15 @@ export default function Portfolio() {
     zh: {
       subtitle: "Web3 投机 / 空投",
       edition: "（破产版）",
-      tagline: "那场暴跌带走了我的梦。",
-      about: "实战玩家，专注二级市场、空投策略、DeFi。偏好早期公链与 Layer2 生态，记录长期盈亏曲线。",
+      tagline: "那场暴跌带走了我的梦",
+      about: "实战玩家，专注二级市场、空投策略、DeFi。",
       email: "邮箱",
     },
     en: {
       subtitle: "Web3 Investor / Airdrop",
       edition: "(Bankrupt ver.)",
-      tagline: "That crash took away my dream.",
-      about: "Hands-on player focusing on secondary market, airdrops and DeFi. Early chain & L2 ecosystem focused, long-term PnL tracking.",
+      tagline: "That crash took away my dream",
+      about: "Hands-on player focusing on secondary market, airdrops and DeFi.",
       email: "Email",
     },
   };
