@@ -62,8 +62,8 @@ export default function Portfolio() {
         <button
           className={`text-xs px-3 py-1 rounded-md border transition-all ${
             theme === "dark"
-              ? "border-white/20 bg-white/10 hover:bg-white/20 text-white"
-              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm text-gray-700"
+              ? "border-white/20 bg-white/10 hover:bg-white/20"
+              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm"
           }`}
           onClick={() => setLang(lang === "zh" ? "en" : "zh")}
           whileTap={{ scale: 0.95 }}
@@ -73,8 +73,8 @@ export default function Portfolio() {
         <button
           className={`text-xs px-3 py-1 rounded-md border transition-all ${
             theme === "dark"
-              ? "border-white/20 bg-white/10 hover:bg-white/20 text-white"
-              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm text-gray-700"
+              ? "border-white/20 bg-white/10 hover:bg-white/20"
+              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm"
           }`}
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           whileTap={{ scale: 0.95 }}
@@ -94,10 +94,10 @@ export default function Portfolio() {
             <motion.img
               src={avatar}
               alt="avatar"
-              className={`w-36 h-36 rounded-full object-cover shadow-lg hover:scale-105 transition-transform ${
+              className={`w-36 h-36 rounded-full object-cover hover:scale-105 transition-transform ${
                 theme === "dark"
                   ? "shadow-[0_0_25px_rgba(168,85,247,0.7)]"
-                  : "shadow-gray-300/50"
+                  : "shadow-lg shadow-gray-300/50"
               }`}
               initial={{ scale: 0.7, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -106,9 +106,7 @@ export default function Portfolio() {
           </div>
 
           <motion.p
-            className={`text-lg ${
-              theme === "dark" ? "opacity-80 text-white" : "text-gray-800"
-            }`}
+            className="text-lg"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
@@ -136,20 +134,22 @@ export default function Portfolio() {
         <div className="grid gap-10 text-left">
           {/* About */}
           <motion.section
-            className={`bg-white/80 dark:bg-white/5 border-2 rounded-2xl p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ${
+            className={`border rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300 ${
               theme === "dark"
-                ? "border-white/20 shadow-[0_0_25px_rgba(168,85,247,0.3)] hover:shadow-[0_0_35px_rgba(168,85,247,0.6)]"
-                : "border-gray-200 shadow-lg backdrop-blur-sm"
+                ? "bg-white/5 border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+                : "bg-white/80 border-gray-200 shadow-lg backdrop-blur-sm"
             }`}
             whileHover={{ y: -4 }}
           >
             <h2 className={`text-xl font-semibold mb-2 ${
-              theme === "dark" ? "text-white" : "text-gray-800"
+              theme === "dark" ? "" : "text-gray-800"
             }`}>
               About
             </h2>
             <p className={`leading-relaxed ${
-              theme === "dark" ? "opacity-80 text-white" : "text-gray-700"
+              theme === "dark" 
+                ? "opacity-80" 
+                : "text-gray-700"
             }`}>
               {L.about}
             </p>
@@ -157,15 +157,17 @@ export default function Portfolio() {
 
           {/* Airdrop List */}
           <motion.section
-            className={`bg-white/80 dark:bg-white/5 border-2 rounded-2xl p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ${
+            className={`border rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300 ${
               theme === "dark"
-                ? "border-white/20 shadow-[0_0_25px_rgba(168,85,247,0.3)] hover:shadow-[0_0_35px_rgba(168,85,247,0.6)]"
-                : "border-gray-200 shadow-lg backdrop-blur-sm"
+                ? "bg-white/5 border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+                : "bg-white/80 border-gray-200 shadow-lg backdrop-blur-sm"
             }`}
             whileHover={{ y: -4 }}
           >
             <ul className={`space-y-1 list-disc list-inside ${
-              theme === "dark" ? "opacity-90 text-white" : "text-gray-800"
+              theme === "dark" 
+                ? "opacity-90" 
+                : "text-gray-800"
             }`}>
               <li>2022 OP Airdrop ✅</li>
               <li>2023 ARB Airdrop ✅</li>
@@ -197,7 +199,7 @@ export default function Portfolio() {
         </div>
 
         <footer className={`pt-4 text-sm text-center ${
-          theme === "dark" ? "opacity-60 text-white" : "text-gray-500"
+          theme === "dark" ? "opacity-60" : "text-gray-500"
         }`}>
           少即是多，信息本质就是优势。
         </footer>
