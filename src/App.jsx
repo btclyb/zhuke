@@ -9,7 +9,6 @@ export default function Portfolio() {
   const t = {
     zh: {
       subtitle: "Web3 投机 / 空投",
-      （破产版）那场暴跌带走了我的梦
       about: "实战玩家，专注二级市场、空投策略、DeFi。",
       email: "邮箱",
     },
