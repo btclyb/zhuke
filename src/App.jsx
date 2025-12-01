@@ -112,13 +112,13 @@ export default function Portfolio() {
             transition={{ delay: 0.4, duration: 0.8 }}
           >
             {L.subtitle}
-            <span className={`ml-2 text-xs opacity-60 font-normal`}>
+            <span className="ml-2 inline text-xs opacity-60 font-normal leading-none">
               {L.edition}
             </span>
           </motion.p>
 
           <motion.p
-            className="mt-2 text-xs opacity-60 font-normal"
+            className="mt-2 inline text-xs opacity-60 font-normal leading-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
