@@ -103,7 +103,7 @@ export default function Portfolio() {
               className="inline-flex items-center gap-2 text-lg text-purple-200 hover:text-purple-300 transition"
             >
               <Mail size={18} />
-              [kk@zhuke.ggff.net](mailto:kk@zhuke.ggff.net)
+              kk@zhuke.ggff.net
               <span className="text-sm opacity-70">↗</span>
             </a>
           </section>
