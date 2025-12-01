@@ -112,7 +112,7 @@ export default function Portfolio() {
             transition={{ delay: 0.4, duration: 0.8 }}
           >
             {L.subtitle}
-            <span className={`ml-2 text-sm ${
+            <span className={`ml-2 text-xs ${
               theme === "dark" ? "opacity-60" : "text-gray-500"
             }`}>
               {L.edition}
