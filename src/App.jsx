@@ -105,22 +105,27 @@ export default function Portfolio() {
             />
           </div>
 
-          <motion.p
-            className="text-lg leading-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-          >
-            {L.subtitle}
-            <span 
-              className="ml-2 text-xs opacity-60 font-normal leading-none tracking-tight"
+          <div className="flex items-center justify-center flex-wrap gap-2">
+            <motion.div
+              className="text-lg font-normal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              {L.subtitle}
+            </motion.div>
+            <motion.span
+              className="text-xs opacity-60 font-normal leading-none tracking-tight"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.45, duration: 0.8 }}
             >
               {L.edition}
-            </span>
-          </motion.p>
+            </motion.span>
+          </div>
 
           <motion.span
-            className="block mt-1 text-xs opacity-60 font-normal leading-none tracking-tight"
+            className="block text-xs opacity-60 font-normal leading-none tracking-tight"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
