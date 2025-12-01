@@ -112,17 +112,13 @@ export default function Portfolio() {
             transition={{ delay: 0.4, duration: 0.8 }}
           >
             {L.subtitle}
-            <span className={`ml-2 text-xs ${
-              theme === "dark" ? "opacity-60" : "text-gray-500"
-            }`}>
+            <span className={`ml-2 text-xs opacity-60 font-normal`}>
               {L.edition}
             </span>
           </motion.p>
 
           <motion.p
-            className={`mt-2 text-sm ${
-              theme === "dark" ? "opacity-60" : "text-gray-500"
-            }`}
+            className="mt-2 text-xs opacity-60 font-normal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
@@ -189,7 +185,7 @@ export default function Portfolio() {
             >
               <Mail size={18} />
               kk@zhuke.ggff.net
-              <span className={`text-sm ${
+              <span className={`text-xs ${
                 theme === "dark" ? "opacity-70" : "text-gray-500"
               }`}>
                 ↗
