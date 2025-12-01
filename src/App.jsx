@@ -1,216 +1,91 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
-import avatar from "./assets/avatar.png"; // 替换成你的头像路径
+import { useState } from "react";
 
-export default function PersonalWebsite() {
+export default function Portfolio() {
   const [lang, setLang] = useState("zh");
-  const [theme, setTheme] = useState("dark");
 
   const t = {
     zh: {
+      title: "kk@zhuke.ggff.net",
       subtitle: "Web3 投机 / 空投",
-      edition: "（破产版）",
       tagline: "那场暴跌带走了我的梦",
-      about: "实战玩家，专注二级市场、空投策略、DeFi。",
-      email: "邮箱",
+      aboutTitle: "实战玩家",
+      aboutContent: "专注二级市场、空投策略、DeFi。偏好早期公链与 Layer2 生态，记录长期盈亏曲线。",
       airdropsTitle: "Past Airdrops",
+      email: "kk@zhuke.ggff.net"
     },
     en: {
-      subtitle: "Web3 Investor / Airdrop",
-      edition: "(Bankrupt ver.)",
+      title: "kk@zhuke.ggff.net",
+      subtitle: "Web3 Investor / Airdrop", 
       tagline: "That crash took away my dream",
-      about: "Hands-on player focusing on secondary market, airdrops and DeFi.",
-      email: "Email",
+      aboutTitle: "Hands-on player",
+      aboutContent: "Focusing on secondary market, airdrops and DeFi. Early chain & L2 ecosystem focused.",
       airdropsTitle: "Past Airdrops",
-    },
+      email: "kk@zhuke.ggff.net"
+    }
   };
 
   const L = t[lang];
 
-  useEffect(() => {
-    if (theme === "light") {
-      document.documentElement.classList.add("light");
-    } else {
-      document.documentElement.classList.remove("light");
-    }
-  }, [theme]);
-
   return (
-    <main
-      className={`relative min-h-screen ${
-        theme === "dark"
-          ? "bg-black text-white"
-          : "bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900"
-      } flex items-center justify-center sm:px-6 px-4 py-20 transition-colors duration-300`}
-    >
-      {theme === "dark" && (
-        <>
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.25),transparent)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
-          <div
-            className="pointer-events-none absolute inset-0 opacity-20"
-            style={{
-              backgroundImage:
-                "url('https://grainy-gradients.vercel.app/noise.svg')",
-            }}
-          />
-        </>
-      )}
+    <main className="min-h-screen bg-white text-black p-8 md:p-12 max-w-4xl mx-auto font-sans leading-relaxed">
+      {/* 语言切换 */}
+      <button 
+        className="fixed top-4 right-4 text-sm border border-black px-3 py-1 hover:bg-black hover:text-white transition-all"
+        onClick={() => setLang(lang === "zh" ? "en" : "zh")}
+      >
+        {lang === "zh" ? "EN" : "中文"}
+      </button>
 
-      {/* 语言和主题切换按钮 */}
-      <div className="absolute top-6 right-6 flex gap-2">
-        <button
-          className={`text-xs px-3 py-1 rounded-md border transition-all ${
-            theme === "dark"
-              ? "border-white/20 bg-white/10 hover:bg-white/20"
-              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm"
-          }`}
-          onClick={() => setLang(lang === "zh" ? "en" : "zh")}
+      {/* 标题 */}
+      <h1 className="text-4xl md:text-6xl font-bold mb-8 leading-tight">
+        {L.title}
+      </h1>
+
+      {/* 副标题 */}
+      <p className="text-2xl md:text-3xl font-light mb-12 opacity-80">
+        {L.subtitle}
+      </p>
+
+      {/* Tagline */}
+      <blockquote className="text-xl md:text-2xl italic opacity-70 mb-20 border-l-4 border-black pl-6">
+        "{L.tagline}"
+      </blockquote>
+
+      {/* About */}
+      <section className="mb-24">
+        <h2 className="text-2xl md:text-3xl font-semibold mb-6">{L.aboutTitle}</h2>
+        <p className="text-lg md:text-xl leading-relaxed max-w-2xl">
+          {L.aboutContent}
+        </p>
+      </section>
+
+      {/* Airdrops */}
+      <section className="mb-24">
+        <h2 className="text-xl md:text-2xl font-semibold mb-8 uppercase tracking-wider opacity-70">
+          {L.airdropsTitle}
+        </h2>
+        <ul className="text-lg md:text-xl space-y-2 list-disc list-inside max-w-lg">
+          <li>2022 OP Airdrop <span className="text-green-600 font-semibold">✅</span></li>
+          <li>2023 ARB Airdrop <span className="text-green-600 font-semibold">✅</span></li>
+          <li>2024 ZKS Airdrop <span className="text-red-600 font-semibold">❌</span></li>
+          <li>2025 Linea Airdrop <span className="text-green-600 font-semibold">✅</span></li>
+        </ul>
+      </section>
+
+      {/* Contact */}
+      <section>
+        <a 
+          href="mailto:kk@zhuke.ggff.net"
+          className="block text-2xl md:text-3xl font-mono underline hover:no-underline hover:text-gray-600 transition-colors"
         >
-          {lang === "zh" ? "EN" : "中文"}
-        </button>
-        <button
-          className={`text-xs px-3 py-1 rounded-md border transition-all ${
-            theme === "dark"
-              ? "border-white/20 bg-white/10 hover:bg-white/20"
-              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm"
-          }`}
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        >
-          {theme === "dark" ? "☀️" : "🌙"}
-        </button>
-      </div>
+          {L.email}
+        </a>
+      </section>
 
-      {/* 主页内容 */}
-      <div className="relative z-10 max-w-2xl w-full text-center space-y-10">
-        {/* 头像和标题 */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="flex justify-center mb-4">
-            <motion.img
-              src={avatar}
-              alt="avatar"
-              className={`w-36 h-36 rounded-full object-cover hover:scale-105 transition-transform ${
-                theme === "dark"
-                  ? "shadow-[0_0_25px_rgba(168,85,247,0.7)]"
-                  : "shadow-lg shadow-gray-300/50"
-              }`}
-              initial={{ scale: 0.7, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-            />
-          </div>
-
-          <div className="flex items-baseline justify-center flex-wrap gap-2">
-            <motion.p
-              className="text-2xl sm:text-3xl font-semibold leading-tight"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-            >
-              {L.subtitle}
-            </motion.p>
-            <motion.span
-              className="text-base opacity-60 font-normal leading-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.35, duration: 0.8 }}
-            >
-              {L.edition}
-            </motion.span>
-          </div>
-
-          <motion.p
-            className="mt-2 text-base opacity-60 font-normal leading-tight"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.45, duration: 0.8 }}
-          >
-            {L.tagline}
-          </motion.p>
-        </motion.div>
-
-        {/* About 文本 */}
-        <section
-          className={`border rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300 ${
-            theme === "dark"
-              ? "bg-white/5 border-white/10"
-              : "bg-white/80 border-gray-200 shadow-lg backdrop-blur-sm"
-          }`}
-        >
-          <h2
-            className={`text-xl font-semibold mb-2 ${
-              theme === "dark" ? "" : "text-gray-800"
-            }`}
-          >
-            About
-          </h2>
-          <p
-            className={`leading-relaxed ${
-              theme === "dark" ? "opacity-80" : "text-gray-700"
-            }`}
-          >
-            {L.about}
-          </p>
-        </section>
-
-        {/* 空投列表 */}
-        <section
-          className={`border rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300 ${
-            theme === "dark"
-              ? "bg-white/5 border-white/10"
-              : "bg-white/80 border-gray-200 shadow-lg backdrop-blur-sm"
-          }`}
-        >
-          <p className="text-xs opacity-60 mb-2 uppercase tracking-wide">
-            {L.airdropsTitle}
-          </p>
-          <ul
-            className={`space-y-1 list-disc list-inside ${
-              theme === "dark" ? "opacity-90" : "text-gray-800"
-            }`}
-          >
-            <li>2022 OP Airdrop ✅</li>
-            <li>2023 ARB Airdrop ✅</li>
-            <li>2024 ZKS Airdrop ❌</li>
-            <li>2025 Linea Airdrop ✅</li>
-          </ul>
-        </section>
-
-        {/* 联系方式 */}
-        <section className="py-6 text-center">
-          <a
-            href="mailto:kk@zhuke.ggff.net"
-            className={`inline-flex items-center gap-2 text-lg transition-all hover:scale-105 ${
-              theme === "dark"
-                ? "text-purple-200 hover:text-purple-300"
-                : "text-purple-600 hover:text-purple-700"
-            }`}
-          >
-            <Mail size={18} />
-            kk@zhuke.ggff.net
-            <span
-              className={`text-xs ${
-                theme === "dark" ? "opacity-70" : "text-gray-500"
-              }`}
-            >
-              ↗
-            </span>
-          </a>
-        </section>
-
-        <footer
-          className={`pt-4 text-sm text-center ${
-            theme === "dark" ? "opacity-60" : "text-gray-500"
-          }`}
-        >
-          少即是多，信息本质就是优势。
-        </footer>
-      </div>
+      {/* Footer */}
+      <footer className="mt-32 pt-12 border-t border-black text-sm opacity-60">
+        少即是多，信息本质就是优势。
+      </footer>
     </main>
   );
 }
