@@ -11,38 +11,46 @@ export default function Portfolio() {
     zh: {
       subtitle: "Web3 投机 / 空投",
       edition: "（破产版）",
-      tagline: "那场暴跌带走了我的梦",
-      about: "实战玩家，专注二级市场、空投策略、DeFi。",
+      tagline: "那场暴跌带走了我的梦。",
+      about: "实战玩家，专注二级市场、空投策略、DeFi。偏好早期公链与 Layer2 生态，记录长期盈亏曲线。",
       email: "邮箱",
     },
     en: {
       subtitle: "Web3 Investor / Airdrop",
       edition: "(Bankrupt ver.)",
-      tagline: "That crash took away my dream",
-      about: "Hands-on player focusing on secondary market, airdrops and DeFi.",
+      tagline: "That crash took away my dream.",
+      about: "Hands-on player focusing on secondary market, airdrops and DeFi. Early chain & L2 ecosystem focused, long-term PnL tracking.",
       email: "Email",
     },
   };
 
   const L = t[lang];
 
-  // Theme toggle
   useEffect(() => {
-    if (theme === 'light') {
-      document.documentElement.classList.add('light');
+    if (theme === "light") {
+      document.documentElement.classList.add("light");
     } else {
-      document.documentElement.classList.remove('light');
+      document.documentElement.classList.remove("light");
     }
   }, [theme]);
 
   return (
-    <main className={`relative min-h-screen ${theme === 'dark' ? 'bg-black text-white' : 'bg-gray-50 text-gray-900'} flex items-center justify-center px-6 py-20 transition-colors`}>
+    <main
+      className={`relative min-h-screen ${
+        theme === "dark"
+          ? "bg-black text-white"
+          : "bg-gray-50 text-gray-900"
+      } flex items-center justify-center px-6 py-20 transition-colors`}
+    >
       {/* Tech Background */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.25),transparent)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
       <div
         className="pointer-events-none absolute inset-0 opacity-20"
-        style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }}
+        style={{
+          backgroundImage:
+            "url('https://grainy-gradients.vercel.app/noise.svg')",
+        }}
       />
 
       {/* Controls */}
@@ -103,8 +111,8 @@ export default function Portfolio() {
 
         <div className="grid gap-10 text-left">
           {/* About */}
-          <motion.section 
-            className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300"
+          <motion.section
+            className="bg-white/10 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300"
             whileHover={{ y: -4 }}
           >
             <h2 className="text-xl font-semibold mb-2">About</h2>
@@ -112,8 +120,8 @@ export default function Portfolio() {
           </motion.section>
 
           {/* Airdrop List */}
-          <motion.section 
-            className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300"
+          <motion.section
+            className="bg-white/10 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300"
             whileHover={{ y: -4 }}
           >
             <ul className="opacity-90 space-y-1 list-disc list-inside">
