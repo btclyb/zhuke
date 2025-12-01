@@ -39,31 +39,43 @@ export default function Portfolio() {
       className={`relative min-h-screen ${
         theme === "dark"
           ? "bg-black text-white"
-          : "bg-gray-50 text-gray-900"
-      } flex items-center justify-center px-6 py-20 transition-colors`}
+          : "bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900"
+      } flex items-center justify-center px-6 py-20 transition-colors duration-300`}
     >
-      {/* Tech Background */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.25),transparent)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-20"
-        style={{
-          backgroundImage:
-            "url('https://grainy-gradients.vercel.app/noise.svg')",
-        }}
-      />
+      {/* Tech Background - only dark mode */}
+      {theme === "dark" && (
+        <>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.25),transparent)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-20"
+            style={{
+              backgroundImage:
+                "url('https://grainy-gradients.vercel.app/noise.svg')",
+            }}
+          />
+        </>
+      )}
 
       {/* Controls */}
       <div className="absolute top-6 right-6 flex gap-2">
         <button
-          className="text-xs px-3 py-1 rounded-md border border-white/20 bg-white/10 hover:bg-white/20 transition-all"
+          className={`text-xs px-3 py-1 rounded-md border transition-all ${
+            theme === "dark"
+              ? "border-white/20 bg-white/10 hover:bg-white/20 text-white"
+              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm text-gray-700"
+          }`}
           onClick={() => setLang(lang === "zh" ? "en" : "zh")}
           whileTap={{ scale: 0.95 }}
         >
           {lang === "zh" ? "EN" : "中文"}
         </button>
         <button
-          className="text-xs px-3 py-1 rounded-md border border-white/20 bg-white/10 hover:bg-white/20 transition-all"
+          className={`text-xs px-3 py-1 rounded-md border transition-all ${
+            theme === "dark"
+              ? "border-white/20 bg-white/10 hover:bg-white/20 text-white"
+              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm text-gray-700"
+          }`}
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           whileTap={{ scale: 0.95 }}
         >
@@ -82,7 +94,11 @@ export default function Portfolio() {
             <motion.img
               src={avatar}
               alt="avatar"
-              className="w-36 h-36 rounded-full object-cover shadow-[0_0_25px_rgba(168,85,247,0.7)] hover:scale-105 transition-transform"
+              className={`w-36 h-36 rounded-full object-cover shadow-lg hover:scale-105 transition-transform ${
+                theme === "dark"
+                  ? "shadow-[0_0_25px_rgba(168,85,247,0.7)]"
+                  : "shadow-gray-300/50"
+              }`}
               initial={{ scale: 0.7, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.6 }}
@@ -90,17 +106,25 @@ export default function Portfolio() {
           </div>
 
           <motion.p
-            className="text-lg opacity-80"
+            className={`text-lg ${
+              theme === "dark" ? "opacity-80 text-white" : "text-gray-800"
+            }`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
             {L.subtitle}
-            <span className="ml-2 text-sm opacity-60">{L.edition}</span>
+            <span className={`ml-2 text-sm ${
+              theme === "dark" ? "opacity-60" : "text-gray-500"
+            }`}>
+              {L.edition}
+            </span>
           </motion.p>
 
           <motion.p
-            className="mt-2 text-sm opacity-60"
+            className={`mt-2 text-sm ${
+              theme === "dark" ? "opacity-60" : "text-gray-500"
+            }`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
@@ -112,19 +136,37 @@ export default function Portfolio() {
         <div className="grid gap-10 text-left">
           {/* About */}
           <motion.section
-            className="bg-white/10 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300"
+            className={`bg-white/80 dark:bg-white/5 border-2 rounded-2xl p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ${
+              theme === "dark"
+                ? "border-white/20 shadow-[0_0_25px_rgba(168,85,247,0.3)] hover:shadow-[0_0_35px_rgba(168,85,247,0.6)]"
+                : "border-gray-200 shadow-lg backdrop-blur-sm"
+            }`}
             whileHover={{ y: -4 }}
           >
-            <h2 className="text-xl font-semibold mb-2">About</h2>
-            <p className="opacity-80 leading-relaxed">{L.about}</p>
+            <h2 className={`text-xl font-semibold mb-2 ${
+              theme === "dark" ? "text-white" : "text-gray-800"
+            }`}>
+              About
+            </h2>
+            <p className={`leading-relaxed ${
+              theme === "dark" ? "opacity-80 text-white" : "text-gray-700"
+            }`}>
+              {L.about}
+            </p>
           </motion.section>
 
           {/* Airdrop List */}
           <motion.section
-            className="bg-white/10 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300"
+            className={`bg-white/80 dark:bg-white/5 border-2 rounded-2xl p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ${
+              theme === "dark"
+                ? "border-white/20 shadow-[0_0_25px_rgba(168,85,247,0.3)] hover:shadow-[0_0_35px_rgba(168,85,247,0.6)]"
+                : "border-gray-200 shadow-lg backdrop-blur-sm"
+            }`}
             whileHover={{ y: -4 }}
           >
-            <ul className="opacity-90 space-y-1 list-disc list-inside">
+            <ul className={`space-y-1 list-disc list-inside ${
+              theme === "dark" ? "opacity-90 text-white" : "text-gray-800"
+            }`}>
               <li>2022 OP Airdrop ✅</li>
               <li>2023 ARB Airdrop ✅</li>
               <li>2024 ZKS Airdrop ❌</li>
@@ -136,17 +178,27 @@ export default function Portfolio() {
           <section className="py-6 text-center">
             <a
               href="mailto:kk@zhuke.ggff.net"
-              className="inline-flex items-center gap-2 text-lg text-purple-200 hover:text-purple-300 transition-all hover:scale-105"
+              className={`inline-flex items-center gap-2 text-lg transition-all hover:scale-105 ${
+                theme === "dark"
+                  ? "text-purple-200 hover:text-purple-300"
+                  : "text-purple-600 hover:text-purple-700"
+              }`}
               whileHover={{ scale: 1.05 }}
             >
               <Mail size={18} />
               kk@zhuke.ggff.net
-              <span className="text-sm opacity-70">↗</span>
+              <span className={`text-sm ${
+                theme === "dark" ? "opacity-70" : "text-gray-500"
+              }`}>
+                ↗
+              </span>
             </a>
           </section>
         </div>
 
-        <footer className="pt-4 opacity-60 text-sm text-center">
+        <footer className={`pt-4 text-sm text-center ${
+          theme === "dark" ? "opacity-60 text-white" : "text-gray-500"
+        }`}>
           少即是多，信息本质就是优势。
         </footer>
       </div>
