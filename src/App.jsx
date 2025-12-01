@@ -105,33 +105,30 @@ export default function Portfolio() {
             />
           </div>
 
-          <div className="flex items-center justify-center flex-wrap gap-2">
-            <motion.div
-              className="text-lg font-normal"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-            >
-              {L.subtitle}
-            </motion.div>
-            <motion.span
-              className="text-xs opacity-60 font-normal leading-none tracking-tight"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.45, duration: 0.8 }}
-            >
+          <motion.p
+            className="text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            {L.subtitle}
+            <span className={`ml-2 text-sm ${
+              theme === "dark" ? "opacity-60" : "text-gray-500"
+            }`}>
               {L.edition}
-            </motion.span>
-          </div>
+            </span>
+          </motion.p>
 
-          <motion.span
-            className="block text-xs opacity-60 font-normal leading-none tracking-tight"
+          <motion.p
+            className={`mt-2 text-sm ${
+              theme === "dark" ? "opacity-60" : "text-gray-500"
+            }`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
             {L.tagline}
-          </motion.span>
+          </motion.p>
         </motion.div>
 
         <div className="grid gap-10 text-left">
@@ -192,7 +189,7 @@ export default function Portfolio() {
             >
               <Mail size={18} />
               kk@zhuke.ggff.net
-              <span className={`text-xs ${
+              <span className={`text-sm ${
                 theme === "dark" ? "opacity-70" : "text-gray-500"
               }`}>
                 ↗
