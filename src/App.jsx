@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Trophy, Target, Sparkles, Moon, Sun, Globe, Bitcoin, TrendingUp, TrendingDown, RefreshCw } from "lucide-react";
 import avatar from "./assets/avatar.png";
 
+// ⚠️ 请在这里填入你的CoinGlass API密钥
+const COINGLASS_API_KEY = "7623587dde4b42f78f5b0f06b410622b";
+
 export default function Portfolio() {
   const [lang, setLang] = useState("zh");
   const [theme, setTheme] = useState("dark");
@@ -90,56 +93,50 @@ export default function Portfolio() {
     source: "模拟数据"
   };
 
-  // 获取比特币价格数据 - 使用CoinGlass API
+  // 获取比特币价格数据 - 使用你自己的CoinGlass API
   const fetchBitcoinPrice = async () => {
     setBtcData(prev => ({ ...prev, loading: true }));
     
     // 尝试的API源
     const apis = [
-      // 1. CoinGlass API (主要)
+      // 1. CoinGlass API (使用你的密钥)
       {
         name: "CoinGlass",
         url: "https://open-api.coinglass.com/api/pro/v1/futures/openInterest/chart?symbol=BTC&interval=2",
         headers: {
           'accept': 'application/json',
-          'coinglassSecret': '9a5d7b8c3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5'
+          'coinglassSecret': COINGLASS_API_KEY
         },
         parser: (data) => {
-          // CoinGlass返回的数据结构可能不同，我们只取最新价格
-          const latestData = data.data?.[0] || {};
-          return {
-            price: latestData.price || mockBTCData.price,
-            change24h: latestData.change24h || mockBTCData.change24h,
-            high24h: latestData.high24h || mockBTCData.high24h,
-            low24h: latestData.low24h || mockBTCData.low24h,
-            volume: latestData.volume || mockBTCData.volume
-          };
+          console.log("CoinGlass API返回数据:", data);
+          
+          // 根据CoinGlass API的实际返回结构调整
+          if (data.data && data.data.length > 0) {
+            const latestData = data.data[0];
+            return {
+              price: latestData.price || mockBTCData.price,
+              change24h: latestData.change24h || mockBTCData.change24h,
+              high24h: latestData.high24h || mockBTCData.high24h,
+              low24h: latestData.low24h || mockBTCData.low24h,
+              volume: latestData.volume || mockBTCData.volume
+            };
+          }
+          
+          // 如果数据格式不符合预期，使用模拟数据
+          return mockBTCData;
         }
       },
-      // 2. CoinGecko的国内镜像
+      // 2. 备用API - 币安
       {
-        name: "CoinGecko镜像",
-        url: "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true",
+        name: "币安",
+        url: "https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT",
         headers: {},
         parser: (data) => ({
-          price: data.bitcoin.usd,
-          change24h: data.bitcoin.usd_24h_change,
-          high24h: null,
-          low24h: null,
-          volume: null
-        })
-      },
-      // 3. 简单的公共API
-      {
-        name: "公共API",
-        url: "https://api.coinstats.app/public/v1/coins/bitcoin",
-        headers: {},
-        parser: (data) => ({
-          price: data.coin.price,
-          change24h: data.coin.priceChange1d,
-          high24h: null,
-          low24h: null,
-          volume: null
+          price: parseFloat(data.lastPrice),
+          change24h: parseFloat(data.priceChangePercent),
+          high24h: parseFloat(data.highPrice),
+          low24h: parseFloat(data.lowPrice),
+          volume: parseFloat(data.quoteVolume)
         })
       }
     ];
@@ -148,11 +145,15 @@ export default function Portfolio() {
       try {
         console.log(`尝试从 ${api.name} 获取数据...`);
         
-        // 直接请求，CoinGlass应该支持CORS
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        
         const response = await fetch(api.url, {
           headers: api.headers,
-          signal: AbortSignal.timeout(8000) // 8秒超时
+          signal: controller.signal
         });
+        
+        clearTimeout(timeoutId);
         
         if (!response.ok) {
           console.warn(`${api.name} 响应失败: ${response.status}`);
@@ -164,22 +165,26 @@ export default function Portfolio() {
         
         const parsedData = api.parser(data);
         
-        setBtcData({
-          price: parsedData.price,
-          change24h: parsedData.change24h,
-          high24h: parsedData.high24h,
-          low24h: parsedData.low24h,
-          volume: parsedData.volume,
-          loading: false,
-          lastUpdated: new Date(),
-          apiSource: api.name
-        });
-        
-        console.log(`成功从 ${api.name} 获取数据`);
-        return; // 成功获取，退出函数
+        // 验证数据有效性
+        if (parsedData.price && !isNaN(parsedData.price)) {
+          setBtcData({
+            price: parsedData.price,
+            change24h: parsedData.change24h || 0,
+            high24h: parsedData.high24h,
+            low24h: parsedData.low24h,
+            volume: parsedData.volume,
+            loading: false,
+            lastUpdated: new Date(),
+            apiSource: api.name
+          });
+          console.log(`成功从 ${api.name} 获取数据`);
+          return;
+        } else {
+          console.warn(`${api.name} 返回无效数据`);
+        }
       } catch (error) {
         console.warn(`${api.name} API失败:`, error.message);
-        continue; // 尝试下一个API
+        continue;
       }
     }
     
@@ -207,7 +212,8 @@ export default function Portfolio() {
     return () => clearInterval(interval);
   }, []);
 
-  // 有趣的状态列表
+  // ... 其他函数保持不变（formatPrice, formatTime, handleRefreshPrice等）
+  // 有趣的状态列表函数
   useEffect(() => {
     const funnyStatuses = lang === "zh" ? [
       "🤖 机器人自动交易中",
@@ -273,12 +279,10 @@ export default function Portfolio() {
       "🤫 Trading secretly"
     ];
 
-    // 初始状态：根据小时选择
     const hour = new Date().getHours();
     const initialIndex = hour % funnyStatuses.length;
     setFunnyStatus(funnyStatuses[initialIndex]);
 
-    // 每分钟换一个状态
     const interval = setInterval(() => {
       const randomIndex = Math.floor(Math.random() * funnyStatuses.length);
       setFunnyStatus(funnyStatuses[randomIndex]);
