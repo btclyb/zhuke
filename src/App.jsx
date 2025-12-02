@@ -132,359 +132,365 @@ export default function Portfolio() {
   }, [lang]);
 
   return (
-    <main
-      className={`relative min-h-screen ${
-        theme === "dark"
-          ? "bg-black text-white"
-          : "bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900"
-      } flex items-center justify-center px-4 sm:px-6 py-12 sm:py-20 transition-colors duration-500`}
-    >
-      {/* Tech Background Effects */}
-      <AnimatePresence>
-        {theme === "dark" && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-blue-900/20"
-            />
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_70%)]" />
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] opacity-50" />
-            {/* Floating particles */}
-            {[...Array(20)].map((_, i) => (
+    <div className="w-full overflow-x-hidden">
+      <main
+        className={`relative min-h-screen w-full overflow-x-hidden ${
+          theme === "dark"
+            ? "bg-black text-white"
+            : "bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900"
+        } flex items-center justify-center px-4 sm:px-6 py-12 sm:py-20 transition-colors duration-500`}
+      >
+        {/* Tech Background Effects */}
+        <AnimatePresence>
+          {theme === "dark" && (
+            <>
               <motion.div
-                key={i}
-                className="absolute w-[1px] h-[1px] bg-purple-400 rounded-full"
-                initial={{
-                  x: Math.random() * 100 + "vw",
-                  y: Math.random() * 100 + "vh",
-                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-blue-900/20"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_70%)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] opacity-50" />
+              {/* Floating particles - 确保在边界内 */}
+              {[...Array(20)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-[1px] h-[1px] bg-purple-400 rounded-full"
+                  initial={{
+                    x: Math.random() * 100 + "vw",
+                    y: Math.random() * 100 + "vh",
+                  }}
+                  animate={{
+                    x: Math.random() * 100 + "vw",
+                    y: Math.random() * 100 + "vh",
+                  }}
+                  transition={{
+                    duration: Math.random() * 20 + 10,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                  }}
+                  style={{
+                    left: 0,
+                    top: 0,
+                  }}
+                />
+              ))}
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Controls */}
+        <motion.div
+          className="absolute top-6 right-6 flex gap-3 z-20"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <motion.button
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all ${
+              theme === "dark"
+                ? "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30"
+                : "border-gray-300 bg-white/70 hover:bg-white shadow-sm hover:shadow"
+            }`}
+            onClick={() => setLang(lang === "zh" ? "en" : "zh")}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Globe size={14} />
+            <span className="text-xs font-medium">{lang === "zh" ? "EN" : "中文"}</span>
+          </motion.button>
+          <motion.button
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all ${
+              theme === "dark"
+                ? "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30"
+                : "border-gray-300 bg-white/70 hover:bg-white shadow-sm hover:shadow"
+            }`}
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+            <span className="text-xs font-medium">{theme === "dark" ? "Light" : "Dark"}</span>
+          </motion.button>
+        </motion.div>
+
+        <div className="relative z-10 max-w-2xl w-full mx-auto space-y-8 sm:space-y-12 px-4">
+          {/* Header with Avatar */}
+          <motion.div
+            className="text-center space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.div
+              className="relative inline-block"
+              onHoverStart={() => setIsHovering("avatar")}
+              onHoverEnd={() => setIsHovering(null)}
+            >
+              <motion.img
+                src={avatar}
+                alt="avatar"
+                className={`w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border-4 transition-all duration-300 ${
+                  theme === "dark"
+                    ? "border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.4)]"
+                    : "border-purple-200 shadow-lg"
+                }`}
                 animate={{
-                  x: Math.random() * 100 + "vw",
-                  y: Math.random() * 100 + "vh",
-                }}
-                transition={{
-                  duration: Math.random() * 20 + 10,
-                  repeat: Infinity,
-                  repeatType: "reverse",
+                  scale: isHovering === "avatar" ? 1.05 : 1,
+                  boxShadow: isHovering === "avatar" 
+                    ? theme === "dark" 
+                      ? "0 0 40px rgba(168,85,247,0.6)" 
+                      : "0 0 30px rgba(168,85,247,0.3)"
+                    : undefined,
                 }}
               />
-            ))}
-          </>
-        )}
-      </AnimatePresence>
+              {isHovering === "avatar" && (
+                <motion.div
+                  className="absolute -top-2 -right-2"
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                >
+                  <Sparkles className="text-yellow-400" size={20} />
+                </motion.div>
+              )}
+            </motion.div>
 
-      {/* Controls */}
-      <motion.div
-        className="absolute top-6 right-6 flex gap-3"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <motion.button
-          className={`flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all ${
-            theme === "dark"
-              ? "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30"
-              : "border-gray-300 bg-white/70 hover:bg-white shadow-sm hover:shadow"
-          }`}
-          onClick={() => setLang(lang === "zh" ? "en" : "zh")}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Globe size={14} />
-          <span className="text-xs font-medium">{lang === "zh" ? "EN" : "中文"}</span>
-        </motion.button>
-        <motion.button
-          className={`flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all ${
-            theme === "dark"
-              ? "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30"
-              : "border-gray-300 bg-white/70 hover:bg-white shadow-sm hover:shadow"
-          }`}
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
-          <span className="text-xs font-medium">{theme === "dark" ? "Light" : "Dark"}</span>
-        </motion.button>
-      </motion.div>
-
-      <div className="relative z-10 max-w-2xl w-full space-y-8 sm:space-y-12">
-        {/* Header with Avatar */}
-        <motion.div
-          className="text-center space-y-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <motion.div
-            className="relative inline-block"
-            onHoverStart={() => setIsHovering("avatar")}
-            onHoverEnd={() => setIsHovering(null)}
-          >
-            <motion.img
-              src={avatar}
-              alt="avatar"
-              className={`w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border-4 transition-all duration-300 ${
-                theme === "dark"
-                  ? "border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.4)]"
-                  : "border-purple-200 shadow-lg"
-              }`}
-              animate={{
-                scale: isHovering === "avatar" ? 1.05 : 1,
-                boxShadow: isHovering === "avatar" 
-                  ? theme === "dark" 
-                    ? "0 0 40px rgba(168,85,247,0.6)" 
-                    : "0 0 30px rgba(168,85,247,0.3)"
-                  : undefined,
-              }}
-            />
-            {isHovering === "avatar" && (
-              <motion.div
-                className="absolute -top-2 -right-2"
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
+            <div className="space-y-2">
+              <motion.h1
+                className="text-2xl sm:text-3xl font-bold tracking-tight"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
               >
-                <Sparkles className="text-yellow-400" size={20} />
-              </motion.div>
-            )}
+                {L.subtitle}
+                <span className={`ml-2 text-sm sm:text-base font-normal ${
+                  theme === "dark" 
+                    ? "text-purple-300/80" 
+                    : "text-purple-600/80"
+                }`}>
+                  {L.edition}
+                </span>
+              </motion.h1>
+              
+              <motion.p
+                className={`text-sm sm:text-base italic ${
+                  theme === "dark" 
+                    ? "text-gray-400" 
+                    : "text-gray-600"
+                }`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                ✨ {L.tagline}
+              </motion.p>
+            </div>
           </motion.div>
 
-          <div className="space-y-2">
-            <motion.h1
-              className="text-2xl sm:text-3xl font-bold tracking-tight"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              {L.subtitle}
-              <span className={`ml-2 text-sm sm:text-base font-normal ${
-                theme === "dark" 
-                  ? "text-purple-300/80" 
-                  : "text-purple-600/80"
-              }`}>
-                {L.edition}
-              </span>
-            </motion.h1>
-            
-            <motion.p
-              className={`text-sm sm:text-base italic ${
-                theme === "dark" 
-                  ? "text-gray-400" 
-                  : "text-gray-600"
-              }`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              ✨ {L.tagline}
-            </motion.p>
-          </div>
-        </motion.div>
-
-        {/* Current Status Card */}
-        <motion.div
-          className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 ${
-            theme === "dark"
-              ? "bg-gradient-to-r from-purple-900/20 via-blue-900/20 to-purple-900/20 border-white/10 hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]"
-              : "bg-gradient-to-r from-purple-50 via-blue-50 to-purple-50 border-gray-200/80 hover:border-purple-300 hover:shadow-xl backdrop-blur-sm"
-          }`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          whileHover={{ y: -3 }}
-        >
-          <div className="flex flex-col items-center justify-center text-center gap-1">
-            <div className="flex items-center gap-2 mb-1">
-              <div className={`p-1.5 rounded-lg ${
-                theme === "dark" 
-                  ? "bg-purple-500/20" 
-                  : "bg-purple-100"
-              }`}>
-                <Target size={16} className={theme === "dark" ? "text-purple-400" : "text-purple-600"} />
+          {/* Current Status Card */}
+          <motion.div
+            className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 ${
+              theme === "dark"
+                ? "bg-gradient-to-r from-purple-900/20 via-blue-900/20 to-purple-900/20 border-white/10 hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]"
+                : "bg-gradient-to-r from-purple-50 via-blue-50 to-purple-50 border-gray-200/80 hover:border-purple-300 hover:shadow-xl backdrop-blur-sm"
+            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            whileHover={{ y: -3 }}
+          >
+            <div className="flex flex-col items-center justify-center text-center gap-1">
+              <div className="flex items-center gap-2 mb-1">
+                <div className={`p-1.5 rounded-lg ${
+                  theme === "dark" 
+                    ? "bg-purple-500/20" 
+                    : "bg-purple-100"
+                }`}>
+                  <Target size={16} className={theme === "dark" ? "text-purple-400" : "text-purple-600"} />
+                </div>
+                <div className="text-sm opacity-70">{L.currentStatus}</div>
               </div>
-              <div className="text-sm opacity-70">{L.currentStatus}</div>
+              <motion.div 
+                className="text-lg sm:text-xl font-bold"
+                key={funnyStatus}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {funnyStatus}
+              </motion.div>
             </div>
-            <motion.div 
-              className="text-lg sm:text-xl font-bold"
-              key={funnyStatus}
-              initial={{ opacity: 0, y: 5 }}
+          </motion.div>
+
+          {/* Main Content */}
+          <div className="space-y-6 sm:space-y-8 w-full">
+            {/* About Section */}
+            <motion.section
+              className={`rounded-2xl p-6 border transition-all duration-300 ${
+                theme === "dark"
+                  ? "bg-gradient-to-br from-gray-900/50 to-gray-800/30 border-white/10 hover:border-purple-500/30 hover:shadow-[0_0_40px_rgba(168,85,247,0.2)]"
+                  : "bg-white/90 border-gray-200/80 hover:border-purple-300 hover:shadow-xl backdrop-blur-sm"
+              }`}
+              whileHover={{ y: -4 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ delay: 0.6 }}
             >
-              {funnyStatus}
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Main Content */}
-        <div className="space-y-6 sm:space-y-8">
-          {/* About Section */}
-          <motion.section
-            className={`rounded-2xl p-6 border transition-all duration-300 ${
-              theme === "dark"
-                ? "bg-gradient-to-br from-gray-900/50 to-gray-800/30 border-white/10 hover:border-purple-500/30 hover:shadow-[0_0_40px_rgba(168,85,247,0.2)]"
-                : "bg-white/90 border-gray-200/80 hover:border-purple-300 hover:shadow-xl backdrop-blur-sm"
-            }`}
-            whileHover={{ y: -4 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
-              <div className={`p-1.5 rounded-lg ${
+              <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
+                <div className={`p-1.5 rounded-lg ${
+                  theme === "dark" 
+                    ? "bg-purple-500/20" 
+                    : "bg-purple-100"
+                }`}>
+                  <Target size={18} />
+                </div>
+                About
+              </h2>
+              <p className={`leading-relaxed ${
                 theme === "dark" 
-                  ? "bg-purple-500/20" 
-                  : "bg-purple-100"
+                  ? "text-gray-300" 
+                  : "text-gray-700"
               }`}>
-                <Target size={18} />
-              </div>
-              About
-            </h2>
-            <p className={`leading-relaxed ${
-              theme === "dark" 
-                ? "text-gray-300" 
-                : "text-gray-700"
-            }`}>
-              {L.about}
-            </p>
-          </motion.section>
+                {L.about}
+              </p>
+            </motion.section>
 
-          {/* Airdrop Section */}
-          <motion.section
-            className={`rounded-2xl p-6 border transition-all duration-300 ${
-              theme === "dark"
-                ? "bg-gradient-to-br from-gray-900/50 to-gray-800/30 border-white/10 hover:border-blue-500/30 hover:shadow-[0_0_40px_rgba(59,130,246,0.2)]"
-                : "bg-white/90 border-gray-200/80 hover:border-blue-300 hover:shadow-xl backdrop-blur-sm"
-            }`}
-            whileHover={{ y: -4 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-          >
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <div className={`p-1.5 rounded-lg ${
-                theme === "dark" 
-                  ? "bg-blue-500/20" 
-                  : "bg-blue-100"
-              }`}>
-                <Trophy size={18} />
-              </div>
-              {L.airdropTitle}
-            </h2>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {airdrops.map((item, index) => (
-                <motion.div
-                  key={item.year}
-                  className={`flex items-center justify-between p-4 rounded-xl transition-all ${
-                    theme === "dark"
-                      ? "hover:bg-white/5"
-                      : "hover:bg-gray-50/80"
-                  }`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 + index * 0.1 }}
-                  whileHover={{ y: -3 }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg ${
+            {/* Airdrop Section */}
+            <motion.section
+              className={`rounded-2xl p-6 border transition-all duration-300 ${
+                theme === "dark"
+                  ? "bg-gradient-to-br from-gray-900/50 to-gray-800/30 border-white/10 hover:border-blue-500/30 hover:shadow-[0_0_40px_rgba(59,130,246,0.2)]"
+                  : "bg-white/90 border-gray-200/80 hover:border-blue-300 hover:shadow-xl backdrop-blur-sm"
+              }`}
+              whileHover={{ y: -4 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <div className={`p-1.5 rounded-lg ${
+                  theme === "dark" 
+                    ? "bg-blue-500/20" 
+                    : "bg-blue-100"
+                }`}>
+                  <Trophy size={18} />
+                </div>
+                {L.airdropTitle}
+              </h2>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                {airdrops.map((item, index) => (
+                  <motion.div
+                    key={item.year}
+                    className={`flex items-center justify-between p-4 rounded-xl transition-all w-full ${
+                      theme === "dark"
+                        ? "hover:bg-white/5"
+                        : "hover:bg-gray-50/80"
+                    }`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 + index * 0.1 }}
+                    whileHover={{ y: -3 }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg ${
+                        item.status === "success"
+                          ? theme === "dark"
+                            ? "bg-green-900/30 text-green-400"
+                            : "bg-green-100 text-green-700"
+                          : theme === "dark"
+                          ? "bg-red-900/30 text-red-400"
+                          : "bg-red-100 text-red-700"
+                      }`}>
+                        {item.status === "success" ? "✓" : "✗"}
+                      </div>
+                      <div>
+                        <div className="font-bold text-lg">
+                          {item.year} {item.name}
+                        </div>
+                        <div className="text-sm opacity-70">
+                          Airdrop
+                        </div>
+                      </div>
+                    </div>
+                    <div className={`px-3 py-1 rounded-full text-sm font-medium ${
                       item.status === "success"
                         ? theme === "dark"
-                          ? "bg-green-900/30 text-green-400"
-                          : "bg-green-100 text-green-700"
+                          ? "bg-green-900/30 text-green-400 border border-green-700/30"
+                          : "bg-green-100 text-green-700 border border-green-200"
                         : theme === "dark"
-                        ? "bg-red-900/30 text-red-400"
-                        : "bg-red-100 text-red-700"
+                        ? "bg-red-900/30 text-red-400 border border-red-700/30"
+                        : "bg-red-100 text-red-700 border border-red-200"
                     }`}>
-                      {item.status === "success" ? "✓" : "✗"}
+                      {item.status === "success" 
+                        ? lang === "zh" ? "成功" : "Success" 
+                        : lang === "zh" ? "失败" : "Failed"
+                      }
                     </div>
-                    <div>
-                      <div className="font-bold text-lg">
-                        {item.year} {item.name}
-                      </div>
-                      <div className="text-sm opacity-70">
-                        Airdrop
-                      </div>
-                    </div>
-                  </div>
-                  <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    item.status === "success"
-                      ? theme === "dark"
-                        ? "bg-green-900/30 text-green-400 border border-green-700/30"
-                        : "bg-green-100 text-green-700 border border-green-200"
-                      : theme === "dark"
-                      ? "bg-red-900/30 text-red-400 border border-red-700/30"
-                      : "bg-red-100 text-red-700 border border-red-200"
-                  }`}>
-                    {item.status === "success" 
-                      ? lang === "zh" ? "成功" : "Success" 
-                      : lang === "zh" ? "失败" : "Failed"
-                    }
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.section>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.section>
 
-          {/* Contact Section */}
-          <motion.section
-            className="text-center py-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
-          >
-            <motion.a
-              href="mailto:kk@zhuke.ggff.net"
-              className={`inline-flex items-center gap-3 px-6 py-3 rounded-full font-medium transition-all ${
-                theme === "dark"
-                  ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-[0_0_30px_rgba(168,85,247,0.4)]"
-                  : "bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-400 hover:to-blue-400 shadow-lg"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            {/* Contact Section */}
+            <motion.section
+              className="text-center py-8 w-full"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9 }}
             >
-              <Mail size={18} />
-              kk@zhuke.ggff.net
-              <span className="text-sm opacity-80">↗</span>
-            </motion.a>
-            
-            <p className={`mt-4 text-sm ${
+              <motion.a
+                href="mailto:kk@zhuke.ggff.net"
+                className={`inline-flex items-center gap-3 px-6 py-3 rounded-full font-medium transition-all ${
+                  theme === "dark"
+                    ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-[0_0_30px_rgba(168,85,247,0.4)]"
+                    : "bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-400 hover:to-blue-400 shadow-lg"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Mail size={18} />
+                kk@zhuke.ggff.net
+                <span className="text-sm opacity-80">↗</span>
+              </motion.a>
+              
+              <p className={`mt-4 text-sm ${
+                theme === "dark" 
+                  ? "opacity-50" 
+                  : "text-gray-500"
+              }`}>
+                {L.contactText}
+              </p>
+            </motion.section>
+          </div>
+
+          {/* Footer */}
+          <motion.footer
+            className={`pt-6 text-center w-full ${
               theme === "dark" 
                 ? "opacity-50" 
-                : "text-gray-500"
-            }`}>
-              {L.contactText}
-            </p>
-          </motion.section>
-        </div>
-
-        {/* Footer */}
-        <motion.footer
-          className={`pt-6 text-center ${
-            theme === "dark" 
-              ? "opacity-50" 
-              : "text-gray-600"
-          }`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
-            <div>💎 {L.motto}</div>
-            <div className="hidden sm:block">•</div>
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${
-                theme === "dark" 
-                  ? "bg-green-500 animate-pulse" 
-                  : "bg-green-400"
-              }`} />
-              {lang === "zh" ? "在线" : "Online"}
+                : "text-gray-600"
+            }`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+          >
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
+              <div>💎 {L.motto}</div>
+              <div className="hidden sm:block">•</div>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  theme === "dark" 
+                    ? "bg-green-500 animate-pulse" 
+                    : "bg-green-400"
+                }`} />
+                {lang === "zh" ? "在线" : "Online"}
+              </div>
             </div>
-          </div>
-        </motion.footer>
-      </div>
-    </main>
+          </motion.footer>
+        </div>
+      </main>
+    </div>
   );
 }
