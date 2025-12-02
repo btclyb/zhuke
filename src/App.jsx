@@ -1,26 +1,50 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Trophy, Target, TrendingUp, Sparkles, Moon, Sun, Globe } from "lucide-react";
 import avatar from "./assets/avatar.png";
 
 export default function Portfolio() {
   const [lang, setLang] = useState("zh");
   const [theme, setTheme] = useState("dark");
+  const [isHovering, setIsHovering] = useState(null);
+
+  const airdrops = [
+    { year: 2022, name: "OP", status: "success", amount: "~$1,200" },
+    { year: 2023, name: "ARB", status: "success", amount: "~$800" },
+    { year: 2024, name: "ZKS", status: "failed", amount: "0" },
+    { year: 2025, name: "Linea", status: "success", amount: "估算中" },
+  ];
+
+  const successRate = Math.round((airdrops.filter(a => a.status === "success").length / airdrops.length) * 100);
 
   const t = {
     zh: {
       subtitle: "Web3 投机 / 空投",
       edition: "（破产版）",
       tagline: "那场暴跌带走了我的梦",
-      about: "实战玩家，专注二级市场、空投策略、DeFi。",
+      about: "实战玩家，专注二级市场、空投策略、DeFi。擅长熊市苟活，牛市起飞。",
+      airdropTitle: "空投战绩",
+      successRate: "成功率",
+      totalValue: "预估价值",
       email: "邮箱",
+      motto: "少即是多，信息本质就是优势",
+      stats: "统计",
+      currentStatus: "当前状态",
+      mood: ["😴 熊市休眠", "🤔 谨慎观望", "🚀 牛市冲锋"],
     },
     en: {
-      subtitle: "Web3 Investor / Airdrop",
-      edition: "(Bankrupt ver.)",
+      subtitle: "Web3 Speculator / Airdrop",
+      edition: "(Bankrupt Edition)",
       tagline: "That crash took away my dream",
-      about: "Hands-on player focusing on secondary market, airdrops and DeFi.",
+      about: "Hands-on player focusing on secondary market, airdrops and DeFi. Surviving bear markets, thriving in bull runs.",
+      airdropTitle: "Airdrop Records",
+      successRate: "Success Rate",
+      totalValue: "Estimated Value",
       email: "Email",
+      motto: "Less is more, information is alpha",
+      stats: "Stats",
+      currentStatus: "Current Status",
+      mood: ["😴 Bear Hibernation", "🤔 Cautious", "🚀 Bull Charging"],
     },
   };
 
@@ -34,177 +58,383 @@ export default function Portfolio() {
     }
   }, [theme]);
 
+  const getMood = () => {
+    const hour = new Date().getHours();
+    if (hour < 9) return L.mood[0];
+    if (hour < 17) return L.mood[1];
+    return L.mood[2];
+  };
+
   return (
     <main
       className={`relative min-h-screen ${
         theme === "dark"
           ? "bg-black text-white"
-          : "bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900"
-      } flex items-center justify-center px-6 py-20 transition-colors duration-300`}
+          : "bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900"
+      } flex items-center justify-center px-4 sm:px-6 py-12 sm:py-20 transition-colors duration-500`}
     >
-      {/* Tech Background - only dark mode */}
-      {theme === "dark" && (
-        <>
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.25),transparent)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
-          <div
-            className="pointer-events-none absolute inset-0 opacity-20"
-            style={{
-              backgroundImage:
-                "url('https://grainy-gradients.vercel.app/noise.svg')",
-            }}
-          />
-        </>
-      )}
+      {/* Tech Background Effects */}
+      <AnimatePresence>
+        {theme === "dark" && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-blue-900/20"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_70%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] opacity-50" />
+            {/* Floating particles */}
+            {[...Array(20)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-[1px] h-[1px] bg-purple-400 rounded-full"
+                initial={{
+                  x: Math.random() * 100 + "vw",
+                  y: Math.random() * 100 + "vh",
+                }}
+                animate={{
+                  x: Math.random() * 100 + "vw",
+                  y: Math.random() * 100 + "vh",
+                }}
+                transition={{
+                  duration: Math.random() * 20 + 10,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              />
+            ))}
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Controls */}
-      <div className="absolute top-6 right-6 flex gap-2">
-        <button
-          className={`text-xs px-3 py-1 rounded-md border transition-all ${
+      <motion.div
+        className="absolute top-6 right-6 flex gap-3"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <motion.button
+          className={`flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all ${
             theme === "dark"
-              ? "border-white/20 bg-white/10 hover:bg-white/20"
-              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm"
+              ? "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30"
+              : "border-gray-300 bg-white/70 hover:bg-white shadow-sm hover:shadow"
           }`}
           onClick={() => setLang(lang === "zh" ? "en" : "zh")}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {lang === "zh" ? "EN" : "中文"}
-        </button>
-        <button
-          className={`text-xs px-3 py-1 rounded-md border transition-all ${
+          <Globe size={14} />
+          <span className="text-xs font-medium">{lang === "zh" ? "EN" : "中文"}</span>
+        </motion.button>
+        <motion.button
+          className={`flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all ${
             theme === "dark"
-              ? "border-white/20 bg-white/10 hover:bg-white/20"
-              : "border-gray-300 bg-white/50 hover:bg-white shadow-sm"
+              ? "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30"
+              : "border-gray-300 bg-white/70 hover:bg-white shadow-sm hover:shadow"
           }`}
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {theme === "dark" ? "☀️" : "🌙"}
-        </button>
-      </div>
-    
-      <div className="relative z-10 max-w-2xl w-full text-center space-y-10">
-        {/* Avatar + Subtitle */}
+          {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+          <span className="text-xs font-medium">{theme === "dark" ? "Light" : "Dark"}</span>
+        </motion.button>
+      </motion.div>
+
+      <div className="relative z-10 max-w-2xl w-full space-y-8 sm:space-y-12">
+        {/* Header with Avatar */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          className="text-center space-y-4"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex justify-center mb-4">
+          <motion.div
+            className="relative inline-block"
+            onHoverStart={() => setIsHovering("avatar")}
+            onHoverEnd={() => setIsHovering(null)}
+          >
             <motion.img
               src={avatar}
               alt="avatar"
-              className={`w-36 h-36 rounded-full object-cover hover:scale-105 transition-transform ${
+              className={`w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border-4 transition-all duration-300 ${
                 theme === "dark"
-                  ? "shadow-[0_0_25px_rgba(168,85,247,0.7)]"
-                  : "shadow-lg shadow-gray-300/50"
+                  ? "border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.4)]"
+                  : "border-purple-200 shadow-lg"
               }`}
-              initial={{ scale: 0.7, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6 }}
+              animate={{
+                scale: isHovering === "avatar" ? 1.05 : 1,
+                boxShadow: isHovering === "avatar" 
+                  ? theme === "dark" 
+                    ? "0 0 40px rgba(168,85,247,0.6)" 
+                    : "0 0 30px rgba(168,85,247,0.3)"
+                  : undefined,
+              }}
             />
+            {isHovering === "avatar" && (
+              <motion.div
+                className="absolute -top-2 -right-2"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+              >
+                <Sparkles className="text-yellow-400" size={20} />
+              </motion.div>
+            )}
+          </motion.div>
+
+          <div className="space-y-2">
+            <motion.h1
+              className="text-2xl sm:text-3xl font-bold tracking-tight"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              {L.subtitle}
+              <span className={`ml-2 text-sm sm:text-base font-normal ${
+                theme === "dark" 
+                  ? "text-purple-300/80" 
+                  : "text-purple-600/80"
+              }`}>
+                {L.edition}
+              </span>
+            </motion.h1>
+            
+            <motion.p
+              className={`text-sm sm:text-base italic ${
+                theme === "dark" 
+                  ? "text-gray-400" 
+                  : "text-gray-600"
+              }`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              ✨ {L.tagline}
+            </motion.p>
           </div>
-    
-          <motion.p
-            className="text-lg"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-          >
-            {L.subtitle}
-            <span className={`ml-2 text-sm ${
-              theme === "dark" ? "opacity-60" : "text-gray-500"
-            }`}>
-              {L.edition}
-            </span>
-          </motion.p>
-    
-          <motion.p
-            className={`mt-2 text-sm ${
-              theme === "dark" ? "opacity-60" : "text-gray-500"
-            }`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-          >
-            {L.tagline}
-          </motion.p>
         </motion.div>
-    
-        <div className="grid gap-10 text-left">
-          {/* About */}
+
+        {/* Stats Bar */}
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <div className={`rounded-xl p-4 text-center ${
+            theme === "dark"
+              ? "bg-gradient-to-br from-purple-900/30 to-purple-700/20 border border-purple-500/20"
+              : "bg-gradient-to-br from-purple-50 to-white border border-purple-100"
+          }`}>
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <Trophy size={16} className="text-yellow-500" />
+              <span className="text-xs opacity-70">{L.successRate}</span>
+            </div>
+            <div className="text-xl sm:text-2xl font-bold">{successRate}%</div>
+          </div>
+
+          <div className={`rounded-xl p-4 text-center ${
+            theme === "dark"
+              ? "bg-gradient-to-br from-blue-900/30 to-blue-700/20 border border-blue-500/20"
+              : "bg-gradient-to-br from-blue-50 to-white border border-blue-100"
+          }`}>
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <TrendingUp size={16} className="text-green-500" />
+              <span className="text-xs opacity-70">{L.totalValue}</span>
+            </div>
+            <div className="text-xl sm:text-2xl font-bold">$2K+</div>
+          </div>
+
+          <div className={`rounded-xl p-4 text-center ${
+            theme === "dark"
+              ? "bg-gradient-to-br from-emerald-900/30 to-emerald-700/20 border border-emerald-500/20"
+              : "bg-gradient-to-br from-emerald-50 to-white border border-emerald-100"
+          }`}>
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <Target size={16} className="text-red-500" />
+              <span className="text-xs opacity-70">{L.currentStatus}</span>
+            </div>
+            <div className="text-sm font-medium">{getMood()}</div>
+          </div>
+        </motion.div>
+
+        {/* Main Content */}
+        <div className="space-y-6 sm:space-y-8">
+          {/* About Section */}
           <motion.section
-            className={`border rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300 ${
+            className={`rounded-2xl p-6 border transition-all duration-300 ${
               theme === "dark"
-                ? "bg-white/5 border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.1)]"
-                : "bg-white/80 border-gray-200 shadow-lg backdrop-blur-sm"
+                ? "bg-gradient-to-br from-gray-900/50 to-gray-800/30 border-white/10 hover:border-purple-500/30 hover:shadow-[0_0_40px_rgba(168,85,247,0.2)]"
+                : "bg-white/90 border-gray-200/80 hover:border-purple-300 hover:shadow-xl backdrop-blur-sm"
             }`}
             whileHover={{ y: -4 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
           >
-            <h2 className={`text-xl font-semibold mb-2 ${
-              theme === "dark" ? "" : "text-gray-800"
-            }`}>
+            <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
+              <div className={`p-1.5 rounded-lg ${
+                theme === "dark" 
+                  ? "bg-purple-500/20" 
+                  : "bg-purple-100"
+              }`}>
+                <Target size={18} />
+              </div>
               About
             </h2>
             <p className={`leading-relaxed ${
               theme === "dark" 
-                ? "opacity-80" 
+                ? "text-gray-300" 
                 : "text-gray-700"
             }`}>
               {L.about}
             </p>
           </motion.section>
-    
-          {/* Airdrop List */}
+
+          {/* Airdrop Section */}
           <motion.section
-            className={`border rounded-2xl p-6 hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300 ${
+            className={`rounded-2xl p-6 border transition-all duration-300 ${
               theme === "dark"
-                ? "bg-white/5 border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.1)]"
-                : "bg-white/80 border-gray-200 shadow-lg backdrop-blur-sm"
+                ? "bg-gradient-to-br from-gray-900/50 to-gray-800/30 border-white/10 hover:border-blue-500/30 hover:shadow-[0_0_40px_rgba(59,130,246,0.2)]"
+                : "bg-white/90 border-gray-200/80 hover:border-blue-300 hover:shadow-xl backdrop-blur-sm"
             }`}
             whileHover={{ y: -4 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
           >
-            <ul className={`space-y-1 list-disc list-inside ${
-              theme === "dark" 
-                ? "opacity-90" 
-                : "text-gray-800"
-            }`}>
-              <li>2022 OP Airdrop ✅</li>
-              <li>2023 ARB Airdrop ✅</li>
-              <li>2024 ZKS Airdrop ❌</li>
-              <li>2025 Linea Airdrop ✅</li>
-            </ul>
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <div className={`p-1.5 rounded-lg ${
+                theme === "dark" 
+                  ? "bg-blue-500/20" 
+                  : "bg-blue-100"
+              }`}>
+                <Trophy size={18} />
+              </div>
+              {L.airdropTitle}
+            </h2>
+            
+            <div className="space-y-3">
+              {airdrops.map((item, index) => (
+                <motion.div
+                  key={item.year}
+                  className={`flex items-center justify-between p-3 rounded-lg transition-all ${
+                    theme === "dark"
+                      ? "hover:bg-white/5"
+                      : "hover:bg-gray-50/80"
+                  }`}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.8 + index * 0.1 }}
+                  whileHover={{ x: 4 }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                      item.status === "success"
+                        ? theme === "dark"
+                          ? "bg-green-900/30 text-green-400"
+                          : "bg-green-100 text-green-700"
+                        : theme === "dark"
+                        ? "bg-red-900/30 text-red-400"
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      {item.status === "success" ? "✓" : "✗"}
+                    </div>
+                    <div>
+                      <div className="font-medium">
+                        {item.year} {item.name} Airdrop
+                      </div>
+                      <div className={`text-xs ${
+                        theme === "dark" 
+                          ? "opacity-60" 
+                          : "text-gray-500"
+                      }`}>
+                        {item.amount}
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`px-2 py-1 rounded text-xs font-medium ${
+                    item.status === "success"
+                      ? theme === "dark"
+                        ? "bg-green-900/30 text-green-400 border border-green-700/30"
+                        : "bg-green-100 text-green-700 border border-green-200"
+                      : theme === "dark"
+                      ? "bg-red-900/30 text-red-400 border border-red-700/30"
+                      : "bg-red-100 text-red-700 border border-red-200"
+                  }`}>
+                    {item.status === "success" 
+                      ? lang === "zh" ? "成功" : "Success" 
+                      : lang === "zh" ? "失败" : "Failed"
+                    }
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.section>
-    
-          {/* Contact */}
-          <section className="py-6 text-center">
-            <a
+
+          {/* Contact Section */}
+          <motion.section
+            className="text-center py-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+          >
+            <motion.a
               href="mailto:kk@zhuke.ggff.net"
-              className={`inline-flex items-center gap-2 text-lg transition-all hover:scale-105 ${
+              className={`inline-flex items-center gap-3 px-6 py-3 rounded-full font-medium transition-all ${
                 theme === "dark"
-                  ? "text-purple-200 hover:text-purple-300"
-                  : "text-purple-600 hover:text-purple-700"
+                  ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-[0_0_30px_rgba(168,85,247,0.4)]"
+                  : "bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-400 hover:to-blue-400 shadow-lg"
               }`}
               whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               <Mail size={18} />
               kk@zhuke.ggff.net
-              <span className={`text-sm ${
-                theme === "dark" ? "opacity-70" : "text-gray-500"
-              }`}>
-                ↗
-              </span>
-            </a>
-          </section>
+              <span className="text-sm opacity-80">↗</span>
+            </motion.a>
+            
+            <p className={`mt-4 text-sm ${
+              theme === "dark" 
+                ? "opacity-50" 
+                : "text-gray-500"
+            }`}>
+              {lang === "zh" 
+                ? "欢迎交流、合作、吐槽" 
+                : "Open to collaboration, discussion, or just chatting"
+              }
+            </p>
+          </motion.section>
         </div>
-    
-        <footer className={`pt-4 text-sm text-center ${
-          theme === "dark" ? "opacity-60" : "text-gray-500"
-        }`}>
-          少即是多，信息本质就是优势。
-        </footer>
+
+        {/* Footer */}
+        <motion.footer
+          className={`pt-6 text-center ${
+            theme === "dark" 
+              ? "opacity-50" 
+              : "text-gray-600"
+          }`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+        >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
+            <div>💎 {L.motto}</div>
+            <div className="hidden sm:block">•</div>
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${
+                theme === "dark" 
+                  ? "bg-green-500 animate-pulse" 
+                  : "bg-green-400"
+              }`} />
+              {lang === "zh" ? "在线" : "Online"}
+            </div>
+          </div>
+        </motion.footer>
       </div>
     </main>
-
   );
 }
