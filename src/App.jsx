@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Trophy, Target, Sparkles, Moon, Sun, Globe, Bitcoin, TrendingUp, TrendingDown, RefreshCw } from "lucide-react";
 import avatar from "./assets/avatar.png";
 
-// ⚠️ 请在这里填入你的CoinGlass API密钥
+// 你的CoinGlass API密钥
 const COINGLASS_API_KEY = "7623587dde4b42f78f5b0f06b410622b";
 
 export default function Portfolio() {
@@ -14,12 +14,9 @@ export default function Portfolio() {
   const [btcData, setBtcData] = useState({
     price: null,
     change24h: null,
-    high24h: null,
-    low24h: null,
-    volume: null,
     loading: true,
     lastUpdated: null,
-    apiSource: "本地缓存"
+    apiSource: "CoinGlass"
   });
 
   const airdrops = [
@@ -45,10 +42,6 @@ export default function Portfolio() {
       loading: "获取价格中...",
       change24h: "24h涨跌",
       refresh: "刷新",
-      source: "数据源",
-      high24h: "24h最高",
-      low24h: "24h最低",
-      volume: "24h交易量",
     },
     en: {
       subtitle: "Web3 Speculator / Airdrop",
@@ -65,10 +58,6 @@ export default function Portfolio() {
       loading: "Fetching price...",
       change24h: "24h Change",
       refresh: "Refresh",
-      source: "Source",
-      high24h: "24h High",
-      low24h: "24h Low",
-      volume: "24h Volume",
     },
   };
 
@@ -87,133 +76,97 @@ export default function Portfolio() {
   const mockBTCData = {
     price: 65230 + Math.random() * 2000 - 1000,
     change24h: (Math.random() * 10 - 5),
-    high24h: 68000,
-    low24h: 64000,
-    volume: 32800000000,
-    source: "模拟数据"
   };
 
-  // 获取比特币价格数据 - 使用你自己的CoinGlass API
+  // 获取比特币价格数据 - 只使用CoinGlass API
   const fetchBitcoinPrice = async () => {
     setBtcData(prev => ({ ...prev, loading: true }));
     
-    // 尝试的API源
-    const apis = [
-      // 1. CoinGlass API (使用你的密钥)
-      {
-        name: "CoinGlass",
-        url: "https://open-api.coinglass.com/api/pro/v1/futures/openInterest/chart?symbol=BTC&interval=2",
+    try {
+      console.log("正在从CoinGlass获取比特币价格数据...");
+      
+      // CoinGlass API - 获取比特币实时价格
+      // 使用更简单的端点：获取BTC价格数据
+      const url = "https://open-api.coinglass.com/api/pro/v1/spot/market";
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
+      
+      const response = await fetch(url, {
         headers: {
           'accept': 'application/json',
           'coinglassSecret': COINGLASS_API_KEY
         },
-        parser: (data) => {
-          console.log("CoinGlass API返回数据:", data);
-          
-          // 根据CoinGlass API的实际返回结构调整
-          if (data.data && data.data.length > 0) {
-            const latestData = data.data[0];
-            return {
-              price: latestData.price || mockBTCData.price,
-              change24h: latestData.change24h || mockBTCData.change24h,
-              high24h: latestData.high24h || mockBTCData.high24h,
-              low24h: latestData.low24h || mockBTCData.low24h,
-              volume: latestData.volume || mockBTCData.volume
-            };
-          }
-          
-          // 如果数据格式不符合预期，使用模拟数据
-          return mockBTCData;
-        }
-      },
-      // 2. 备用API - 币安
-      {
-        name: "币安",
-        url: "https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT",
-        headers: {},
-        parser: (data) => ({
-          price: parseFloat(data.lastPrice),
-          change24h: parseFloat(data.priceChangePercent),
-          high24h: parseFloat(data.highPrice),
-          low24h: parseFloat(data.lowPrice),
-          volume: parseFloat(data.quoteVolume)
-        })
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw new Error(`CoinGlass API响应失败: ${response.status}`);
       }
-    ];
-
-    for (const api of apis) {
-      try {
-        console.log(`尝试从 ${api.name} 获取数据...`);
+      
+      const data = await response.json();
+      console.log("CoinGlass API返回数据:", data);
+      
+      // 解析CoinGlass返回的数据
+      let btcPrice = null;
+      let btcChange24h = null;
+      
+      if (data.data && Array.isArray(data.data)) {
+        // 查找比特币数据
+        const btcItem = data.data.find(item => 
+          item.symbol === "BTC" || item.name === "Bitcoin"
+        );
         
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-        
-        const response = await fetch(api.url, {
-          headers: api.headers,
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-          console.warn(`${api.name} 响应失败: ${response.status}`);
-          continue;
+        if (btcItem) {
+          btcPrice = btcItem.price || btcItem.close;
+          btcChange24h = btcItem.change24h || btcItem.changePercent24h;
         }
-        
-        const data = await response.json();
-        console.log(`${api.name} 返回数据:`, data);
-        
-        const parsedData = api.parser(data);
-        
-        // 验证数据有效性
-        if (parsedData.price && !isNaN(parsedData.price)) {
-          setBtcData({
-            price: parsedData.price,
-            change24h: parsedData.change24h || 0,
-            high24h: parsedData.high24h,
-            low24h: parsedData.low24h,
-            volume: parsedData.volume,
-            loading: false,
-            lastUpdated: new Date(),
-            apiSource: api.name
-          });
-          console.log(`成功从 ${api.name} 获取数据`);
-          return;
-        } else {
-          console.warn(`${api.name} 返回无效数据`);
-        }
-      } catch (error) {
-        console.warn(`${api.name} API失败:`, error.message);
-        continue;
       }
+      
+      // 如果没找到数据，使用模拟数据
+      if (!btcPrice || isNaN(btcPrice)) {
+        console.warn("CoinGlass未返回有效的比特币价格，使用模拟数据");
+        btcPrice = mockBTCData.price;
+        btcChange24h = mockBTCData.change24h;
+      }
+      
+      setBtcData({
+        price: btcPrice,
+        change24h: btcChange24h,
+        loading: false,
+        lastUpdated: new Date(),
+        apiSource: "CoinGlass"
+      });
+      
+      console.log("成功从CoinGlass获取比特币数据");
+      
+    } catch (error) {
+      console.warn("CoinGlass API失败，使用模拟数据:", error.message);
+      
+      // API失败，使用模拟数据
+      setBtcData({
+        price: mockBTCData.price,
+        change24h: mockBTCData.change24h,
+        loading: false,
+        lastUpdated: new Date(),
+        apiSource: "模拟数据"
+      });
     }
-    
-    // 所有API都失败，使用模拟数据
-    console.log("所有API都失败，使用模拟数据");
-    setBtcData({
-      price: mockBTCData.price,
-      change24h: mockBTCData.change24h,
-      high24h: mockBTCData.high24h,
-      low24h: mockBTCData.low24h,
-      volume: mockBTCData.volume,
-      loading: false,
-      lastUpdated: new Date(),
-      apiSource: "模拟数据"
-    });
   };
 
   // 初始化获取价格
   useEffect(() => {
     fetchBitcoinPrice();
     
-    // 每90秒更新一次价格
-    const interval = setInterval(fetchBitcoinPrice, 90000);
+    // 每60秒更新一次价格
+    const interval = setInterval(fetchBitcoinPrice, 60000);
     
     return () => clearInterval(interval);
   }, []);
 
-  // ... 其他函数保持不变（formatPrice, formatTime, handleRefreshPrice等）
-  // 有趣的状态列表函数
+  // 有趣的状态列表
   useEffect(() => {
     const funnyStatuses = lang === "zh" ? [
       "🤖 机器人自动交易中",
@@ -293,25 +246,13 @@ export default function Portfolio() {
 
   // 格式化价格显示
   const formatPrice = (price) => {
-    if (!price) return "$---";
+    if (!price || isNaN(price)) return "$---";
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);
-  };
-
-  // 格式化交易量
-  const formatVolume = (volume) => {
-    if (!volume) return null;
-    if (volume >= 1000000000) {
-      return `$${(volume / 1000000000).toFixed(1)}B`;
-    }
-    if (volume >= 1000000) {
-      return `$${(volume / 1000000).toFixed(1)}M`;
-    }
-    return `$${volume.toLocaleString()}`;
   };
 
   // 格式化时间
@@ -468,7 +409,7 @@ export default function Portfolio() {
             </div>
           </motion.div>
 
-          {/* 比特币价格卡片 */}
+          {/* 比特币价格卡片 - 简化版 */}
           <motion.div
             className={`rounded-2xl p-5 border transition-all duration-300 ${
               theme === "dark"
@@ -480,7 +421,7 @@ export default function Portfolio() {
             transition={{ delay: 0.4 }}
             whileHover={{ y: -3 }}
           >
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               {/* 主要价格信息 */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -500,12 +441,12 @@ export default function Portfolio() {
                         </span>
                       )}
                     </div>
-                    <div className="flex items-baseline gap-2 flex-wrap">
+                    <div className="flex items-baseline gap-3 flex-wrap">
                       <div className="text-xl sm:text-2xl font-bold">
                         {btcData.loading ? "$---" : formatPrice(btcData.price)}
                       </div>
                       {btcData.change24h !== null && !isNaN(btcData.change24h) && (
-                        <div className={`flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full ${
+                        <div className={`flex items-center gap-1 text-sm font-medium px-3 py-1 rounded-full ${
                           btcData.change24h >= 0
                             ? theme === "dark"
                               ? "bg-green-900/30 text-green-400"
@@ -544,37 +485,16 @@ export default function Portfolio() {
                 </div>
               </div>
 
-              {/* 详细信息 */}
-              {!btcData.loading && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-white/10">
-                  {btcData.high24h && (
-                    <div className="text-center">
-                      <div className="text-xs opacity-70 mb-1">{L.high24h}</div>
-                      <div className="text-sm font-medium text-green-500">{formatPrice(btcData.high24h)}</div>
-                    </div>
-                  )}
-                  {btcData.low24h && (
-                    <div className="text-center">
-                      <div className="text-xs opacity-70 mb-1">{L.low24h}</div>
-                      <div className="text-sm font-medium text-red-500">{formatPrice(btcData.low24h)}</div>
-                    </div>
-                  )}
-                  {btcData.volume && (
-                    <div className="text-center">
-                      <div className="text-xs opacity-70 mb-1">{L.volume}</div>
-                      <div className="text-sm font-medium">{formatVolume(btcData.volume)}</div>
-                    </div>
-                  )}
-                  <div className="text-center">
-                    <div className="text-xs opacity-70 mb-1">{L.updated}</div>
-                    <div className="text-sm font-medium">{formatTime(btcData.lastUpdated)}</div>
-                  </div>
-                </div>
-              )}
-
-              {/* 数据源信息 */}
+              {/* 底部信息 */}
               <div className="flex justify-between items-center pt-3 border-t border-white/10">
-                <div className={`text-xs px-2 py-1 rounded ${
+                <div className={`text-xs opacity-70 ${
+                  theme === "dark" 
+                    ? "text-white/60" 
+                    : "text-gray-600"
+                }`}>
+                  {L.updated} {formatTime(btcData.lastUpdated)}
+                </div>
+                <div className={`text-xs px-2 py-0.5 rounded ${
                   btcData.apiSource === "模拟数据"
                     ? theme === "dark"
                       ? "bg-red-900/30 text-red-300"
@@ -583,14 +503,7 @@ export default function Portfolio() {
                     ? "bg-green-900/30 text-green-300"
                     : "bg-green-100 text-green-700"
                 }`}>
-                  {L.source}: {btcData.apiSource}
-                </div>
-                <div className={`text-xs opacity-50 ${
-                  theme === "dark" 
-                    ? "text-white/40" 
-                    : "text-gray-500"
-                }`}>
-                  {lang === "zh" ? "数据延迟<5分钟" : "Data delay <5min"}
+                  {btcData.apiSource}
                 </div>
               </div>
 
