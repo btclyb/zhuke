@@ -7,6 +7,7 @@ export default function Portfolio() {
   const [lang, setLang] = useState("zh");
   const [theme, setTheme] = useState("dark");
   const [isHovering, setIsHovering] = useState(null);
+  const [funnyStatus, setFunnyStatus] = useState("");
 
   const airdrops = [
     { year: 2022, name: "OP", status: "success", amount: "~$1,200" },
@@ -20,7 +21,7 @@ export default function Portfolio() {
   const t = {
     zh: {
       subtitle: "Web3 投机 / 空投",
-      edition: "（熊市躺平版）",
+      edition: "（破产版）",
       tagline: "那场暴跌带走了我的梦",
       about: "实战玩家，专注二级市场、空投策略、DeFi。擅长熊市苟活，牛市起飞。",
       airdropTitle: "空投战绩",
@@ -30,11 +31,11 @@ export default function Portfolio() {
       motto: "少即是多，信息本质就是优势",
       stats: "统计",
       currentStatus: "当前状态",
-      mood: ["😴 熊市休眠", "🤔 谨慎观望", "🚀 牛市冲锋"],
+      contactText: "欢迎交流、合作、吐槽",
     },
     en: {
       subtitle: "Web3 Speculator / Airdrop",
-      edition: "(Bear market flat version)",
+      edition: "(Bankrupt Edition)",
       tagline: "That crash took away my dream",
       about: "Hands-on player focusing on secondary market, airdrops and DeFi. Surviving bear markets, thriving in bull runs.",
       airdropTitle: "Airdrop Records",
@@ -44,7 +45,7 @@ export default function Portfolio() {
       motto: "Less is more, information is alpha",
       stats: "Stats",
       currentStatus: "Current Status",
-      mood: ["😴 Bear Hibernation", "🤔 Cautious", "🚀 Bull Charging"],
+      contactText: "Open to collaboration, discussion, or just chatting",
     },
   };
 
@@ -58,12 +59,85 @@ export default function Portfolio() {
     }
   }, [theme]);
 
-  const getMood = () => {
+  useEffect(() => {
+    // 有趣的状态列表
+    const funnyStatuses = lang === "zh" ? [
+      "🤖 机器人自动交易中",
+      "🧙 施法：币价上涨！",
+      "🏴‍☠️ 寻找宝藏币",
+      "🎯 瞄准下一个百倍",
+      "💎 钻石手已焊死",
+      "🚫 忍住不卖",
+      "🔥 热点追踪中",
+      "🎮 GameFi打金中",
+      "🦄 寻找独角兽项目",
+      "📉 抄底按钮准备",
+      "🚀 准备起飞",
+      "💤 睡觉，勿扰（除非10倍）",
+      "☕️ 喝咖啡，看K线",
+      "📊 分析昨夜数据",
+      "🤔 思考：抄底还是逃顶？",
+      "🍱 边吃饭边看插针",
+      "📉 假装淡定看跳水",
+      "🧘 佛系持币",
+      "🤑 数U（想象中的）",
+      "🔍 寻找新Alpha",
+      "🚀 美盘，准备起飞",
+      "🌃 熬夜盯盘/FOMO中",
+      "👨‍💻 假装工作实则在看盘",
+      "🔗 检查链上交互",
+      "🪙 研究新空投",
+      "📝 写交易计划",
+      "🧪 测试新协议",
+      "🎣 挂单钓鱼中",
+      "🚨 等待大消息",
+      "🤫 偷偷交易中"
+    ] : [
+      "🤖 Bot trading mode",
+      "🧙 Casting: Price up!",
+      "🏴‍☠️ Hunting treasure coins",
+      "🎯 Aiming for 100x",
+      "💎 Diamond hands locked",
+      "🚫 Resisting sell urge",
+      "🔥 Chasing narratives",
+      "🎮 Gaming for yield",
+      "🦄 Hunting unicorns",
+      "📉 Buy dip ready",
+      "🚀 Ready for launch",
+      "💤 Sleeping (unless 10x)",
+      "☕️ Coffee + charts",
+      "📊 Analyzing overnight data",
+      "🤔 Buy dip or sell high?",
+      "🍱 Lunch with price alerts",
+      "📉 Watching dip 'calmly'",
+      "🧘 Zen holding",
+      "🤑 Counting imaginary gains",
+      "🔍 Hunting for alpha",
+      "🚀 US market ready",
+      "🌃 Late night trading/FOMO",
+      "👨‍💻 Pretending to work",
+      "🔗 Checking on-chain",
+      "🪙 Researching airdrops",
+      "📝 Writing trade plan",
+      "🧪 Testing new protocol",
+      "🎣 Placing limit orders",
+      "🚨 Waiting for news",
+      "🤫 Trading secretly"
+    ];
+
+    // 初始状态：根据小时选择
     const hour = new Date().getHours();
-    if (hour < 9) return L.mood[0];
-    if (hour < 17) return L.mood[1];
-    return L.mood[2];
-  };
+    const initialIndex = hour % funnyStatuses.length;
+    setFunnyStatus(funnyStatuses[initialIndex]);
+
+    // 每分钟换一个状态
+    const interval = setInterval(() => {
+      const randomIndex = Math.floor(Math.random() * funnyStatuses.length);
+      setFunnyStatus(funnyStatuses[randomIndex]);
+    }, 60000); // 每60秒更换一次
+
+    return () => clearInterval(interval);
+  }, [lang]);
 
   return (
     <main
@@ -257,7 +331,15 @@ export default function Portfolio() {
               <Target size={16} className="text-red-500" />
               <span className="text-xs opacity-70">{L.currentStatus}</span>
             </div>
-            <div className="text-sm font-medium">{getMood()}</div>
+            <motion.div 
+              className="text-sm font-medium"
+              key={funnyStatus}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {funnyStatus}
+            </motion.div>
           </div>
         </motion.div>
 
@@ -402,10 +484,7 @@ export default function Portfolio() {
                 ? "opacity-50" 
                 : "text-gray-500"
             }`}>
-              {lang === "zh" 
-                ? "欢迎交流、合作、吐槽" 
-                : "Open to collaboration, discussion, or just chatting"
-              }
+              {L.contactText}
             </p>
           </motion.section>
         </div>
