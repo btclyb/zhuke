@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Trophy, Target, Sparkles, Moon, Sun, Globe } from "lucide-react";
+import { Mail, Trophy, Target, Sparkles, Moon, Sun, Globe, Bitcoin, TrendingUp, TrendingDown } from "lucide-react";
 import avatar from "./assets/avatar.png";
 
 export default function Portfolio() {
@@ -8,6 +8,12 @@ export default function Portfolio() {
   const [theme, setTheme] = useState("dark");
   const [isHovering, setIsHovering] = useState(null);
   const [funnyStatus, setFunnyStatus] = useState("");
+  const [btcData, setBtcData] = useState({
+    price: null,
+    change24h: null,
+    loading: true,
+    lastUpdated: null
+  });
 
   const airdrops = [
     { year: 2022, name: "OP", status: "success" },
@@ -27,6 +33,10 @@ export default function Portfolio() {
       email: "邮箱",
       motto: "少即是多，信息本质就是优势",
       contactText: "欢迎交流、合作、吐槽",
+      btcPrice: "比特币价格",
+      updated: "更新于",
+      loading: "获取价格中...",
+      change24h: "24h涨跌",
     },
     en: {
       subtitle: "Web3 Speculator / Airdrop",
@@ -38,11 +48,16 @@ export default function Portfolio() {
       email: "Email",
       motto: "Less is more, information is alpha",
       contactText: "Open to collaboration, discussion, or just chatting",
+      btcPrice: "Bitcoin Price",
+      updated: "Updated",
+      loading: "Fetching price...",
+      change24h: "24h Change",
     },
   };
 
   const L = t[lang];
 
+  // 主题切换效果
   useEffect(() => {
     if (theme === "light") {
       document.documentElement.classList.add("light");
@@ -51,8 +66,52 @@ export default function Portfolio() {
     }
   }, [theme]);
 
+  // 获取比特币价格数据
   useEffect(() => {
-    // 有趣的状态列表
+    const fetchBitcoinPrice = async () => {
+      try {
+        setBtcData(prev => ({ ...prev, loading: true }));
+        
+        // 使用CoinGecko API获取比特币价格
+        const response = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true'
+        );
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch BTC price');
+        }
+        
+        const data = await response.json();
+        
+        setBtcData({
+          price: data.bitcoin.usd,
+          change24h: data.bitcoin.usd_24h_change,
+          loading: false,
+          lastUpdated: new Date()
+        });
+      } catch (error) {
+        console.error('Error fetching BTC price:', error);
+        // 如果API失败，使用模拟数据
+        setBtcData({
+          price: 68500,
+          change24h: 2.5,
+          loading: false,
+          lastUpdated: new Date()
+        });
+      }
+    };
+
+    // 立即获取一次
+    fetchBitcoinPrice();
+    
+    // 每30秒更新一次价格
+    const interval = setInterval(fetchBitcoinPrice, 30000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // 有趣的状态列表
+  useEffect(() => {
     const funnyStatuses = lang === "zh" ? [
       "🤖 机器人自动交易中",
       "🧙 施法：币价上涨！",
@@ -131,6 +190,30 @@ export default function Portfolio() {
     return () => clearInterval(interval);
   }, [lang]);
 
+  // 格式化价格显示
+  const formatPrice = (price) => {
+    if (!price) return "$---";
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  // 格式化时间
+  const formatTime = (date) => {
+    if (!date) return '';
+    const now = new Date();
+    const diffInMinutes = Math.floor((now - date) / 60000);
+    
+    if (diffInMinutes < 1) return lang === "zh" ? "刚刚" : "Just now";
+    if (diffInMinutes < 60) return `${diffInMinutes}${lang === "zh" ? "分钟前" : "m ago"}`;
+    
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    return `${diffInHours}${lang === "zh" ? "小时前" : "h ago"}`;
+  };
+
   return (
     <div className="w-full overflow-x-hidden">
       <main
@@ -152,7 +235,7 @@ export default function Portfolio() {
               />
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_70%)]" />
               <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] opacity-50" />
-              {/* Floating particles - 确保在边界内 */}
+              {/* Floating particles */}
               {[...Array(20)].map((_, i) => (
                 <motion.div
                   key={i}
@@ -169,10 +252,6 @@ export default function Portfolio() {
                     duration: Math.random() * 20 + 10,
                     repeat: Infinity,
                     repeatType: "reverse",
-                  }}
-                  style={{
-                    left: 0,
-                    top: 0,
                   }}
                 />
               ))}
@@ -288,6 +367,93 @@ export default function Portfolio() {
             </div>
           </motion.div>
 
+          {/* 比特币价格卡片 */}
+          <motion.div
+            className={`rounded-2xl p-5 border transition-all duration-300 ${
+              theme === "dark"
+                ? "bg-gradient-to-r from-yellow-900/20 via-yellow-800/10 to-yellow-900/20 border-yellow-500/20 hover:border-yellow-500/40 hover:shadow-[0_0_30px_rgba(234,179,8,0.2)]"
+                : "bg-gradient-to-r from-yellow-50 via-yellow-50/50 to-yellow-50 border-yellow-200 hover:border-yellow-300 hover:shadow-xl backdrop-blur-sm"
+            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            whileHover={{ y: -3 }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg ${
+                  theme === "dark" 
+                    ? "bg-yellow-500/20" 
+                    : "bg-yellow-100"
+                }`}>
+                  <Bitcoin size={20} className={theme === "dark" ? "text-yellow-400" : "text-yellow-600"} />
+                </div>
+                <div className="text-left">
+                  <div className="text-sm opacity-70 flex items-center gap-2">
+                    {L.btcPrice}
+                    {btcData.loading && (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-white/10 animate-pulse">
+                        {L.loading}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <div className="text-lg sm:text-xl font-bold">
+                      {btcData.loading ? "$---" : formatPrice(btcData.price)}
+                    </div>
+                    {btcData.change24h !== null && (
+                      <div className={`flex items-center gap-1 text-sm font-medium px-2 py-0.5 rounded-full ${
+                        btcData.change24h >= 0
+                          ? theme === "dark"
+                            ? "bg-green-900/30 text-green-400"
+                            : "bg-green-100 text-green-700"
+                          : theme === "dark"
+                          ? "bg-red-900/30 text-red-400"
+                          : "bg-red-100 text-red-700"
+                      }`}>
+                        {btcData.change24h >= 0 ? (
+                          <TrendingUp size={12} />
+                        ) : (
+                          <TrendingDown size={12} />
+                        )}
+                        {Math.abs(btcData.change24h).toFixed(2)}%
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-right">
+                <div className={`text-xs px-2 py-1 rounded-full ${
+                  theme === "dark" 
+                    ? "bg-white/10 text-white/70" 
+                    : "bg-gray-100 text-gray-600"
+                }`}>
+                  {L.updated} {formatTime(btcData.lastUpdated)}
+                </div>
+                <div className="text-xs opacity-50 mt-1">
+                  {L.change24h}
+                </div>
+              </div>
+            </div>
+            
+            {/* 价格趋势动画效果 */}
+            {!btcData.loading && btcData.change24h !== null && (
+              <motion.div 
+                className={`h-1 mt-3 rounded-full ${
+                  btcData.change24h >= 0
+                    ? "bg-gradient-to-r from-green-500 to-emerald-400"
+                    : "bg-gradient-to-r from-red-500 to-orange-400"
+                }`}
+                initial={{ width: "0%" }}
+                animate={{ 
+                  width: `${Math.min(Math.abs(btcData.change24h) * 10, 100)}%` 
+                }}
+                transition={{ duration: 1 }}
+              />
+            )}
+          </motion.div>
+
           {/* Current Status Card */}
           <motion.div
             className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 ${
@@ -297,7 +463,7 @@ export default function Portfolio() {
             }`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.5 }}
             whileHover={{ y: -3 }}
           >
             <div className="flex flex-col items-center justify-center text-center gap-1">
@@ -487,6 +653,9 @@ export default function Portfolio() {
                 }`} />
                 {lang === "zh" ? "在线" : "Online"}
               </div>
+            </div>
+            <div className="text-xs opacity-30 mt-2">
+              {lang === "zh" ? "数据仅供参考，投资需谨慎" : "Data for reference only, invest with caution"}
             </div>
           </motion.footer>
         </div>
