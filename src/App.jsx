@@ -284,37 +284,50 @@ export default function Portfolio() {
         </motion.div>
 
         {/* Current Status Card (占满宽度) */}
-        <motion.div
-          className={`rounded-2xl p-6 border transition-all duration-300 ${
-            theme === "dark"
-              ? "bg-gradient-to-r from-purple-900/20 via-blue-900/20 to-purple-900/20 border-white/10 hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]"
-              : "bg-gradient-to-r from-purple-50 via-blue-50 to-purple-50 border-gray-200/80 hover:border-purple-300 hover:shadow-xl backdrop-blur-sm"
-          }`}
-          initial={{ opacity: 0, y: 20 }}
+<motion.div
+  className={`rounded-2xl p-6 border transition-all duration-300 ${
+    theme === "dark"
+      ? "bg-gradient-to-r from-purple-900/20 via-blue-900/20 to-purple-900/20 border-white/10 hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]"
+      : "bg-gradient-to-r from-purple-50 via-blue-50 to-purple-50 border-gray-200/80 hover:border-purple-300 hover:shadow-xl backdrop-blur-sm"
+  }`}
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.4 }}
+  whileHover={{ y: -3 }}
+>
+  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+    {/* 删除原有的左右布局，改为居中布局 */}
+    <div className="flex items-center gap-3">
+      <div className={`p-2 rounded-lg ${
+        theme === "dark" 
+          ? "bg-purple-500/20" 
+          : "bg-purple-100"
+      }`}>
+        <Target size={20} className={theme === "dark" ? "text-purple-400" : "text-purple-600"} />
+      </div>
+      <div className="text-left">
+        <div className="text-sm opacity-70">{L.currentStatus}</div>
+        <motion.div 
+          className="text-lg font-bold"
+          key={funnyStatus}
+          initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          whileHover={{ y: -3 }}
+          transition={{ duration: 0.3 }}
         >
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${
-                theme === "dark" 
-                  ? "bg-purple-500/20" 
-                  : "bg-purple-100"
-              }`}>
-                <Target size={20} className={theme === "dark" ? "text-purple-400" : "text-purple-600"} />
-              </div>
-              <div className="text-left">
-                <div className="text-sm opacity-70">{L.currentStatus}</div>
-                <motion.div 
-                  className="text-lg font-bold"
-                  key={funnyStatus}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {funnyStatus}
-                </motion.div>
+          {funnyStatus}
+        </motion.div>
+      </div>
+    </div>
+    {/* 删除这个标签 */}
+    {/* <div className={`text-xs px-3 py-1 rounded-full ${
+      theme === "dark" 
+        ? "bg-white/10 text-white/70" 
+        : "bg-gray-100 text-gray-600"
+    }`}>
+      {lang === "zh" ? "状态每分钟更新" : "Updates every minute"}
+    </div> */}
+  </div>
+</motion.div>
               </div>
             </div>
             <div className={`text-xs px-3 py-1 rounded-full ${
