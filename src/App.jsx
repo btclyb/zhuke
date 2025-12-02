@@ -20,7 +20,7 @@ export default function Portfolio() {
   const t = {
     zh: {
       subtitle: "Web3 投机 / 空投",
-      edition: "（破产版）",
+      edition: "（熊市躺平版）",
       tagline: "那场暴跌带走了我的梦",
       about: "实战玩家，专注二级市场、空投策略、DeFi。擅长熊市苟活，牛市起飞。",
       airdropTitle: "空投战绩",
@@ -34,7 +34,7 @@ export default function Portfolio() {
     },
     en: {
       subtitle: "Web3 Speculator / Airdrop",
-      edition: "(Bankrupt Edition)",
+      edition: "(Bear market flat version)",
       tagline: "That crash took away my dream",
       about: "Hands-on player focusing on secondary market, airdrops and DeFi. Surviving bear markets, thriving in bull runs.",
       airdropTitle: "Airdrop Records",
