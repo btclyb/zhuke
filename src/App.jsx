@@ -26,7 +26,7 @@ export default function Portfolio() {
       currentStatus: "当前状态",
       email: "邮箱",
       motto: "少即是多，信息本质就是优势",
-      contactText: "勿扰",
+      contactText: "",
     },
     en: {
       subtitle: "Web3 Speculator / Airdrop",
@@ -37,7 +37,7 @@ export default function Portfolio() {
       currentStatus: "Current Status",
       email: "Email",
       motto: "Less is more, information is alpha",
-      contactText: "Do not disturb",
+      contactText: "",
     },
   };
 
