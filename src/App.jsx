@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Trophy, Target, TrendingUp, Sparkles, Moon, Sun, Globe } from "lucide-react";
+import { Mail, Trophy, Target, Sparkles, Moon, Sun, Globe } from "lucide-react";
 import avatar from "./assets/avatar.png";
 
 export default function Portfolio() {
@@ -10,13 +10,11 @@ export default function Portfolio() {
   const [funnyStatus, setFunnyStatus] = useState("");
 
   const airdrops = [
-    { year: 2022, name: "OP", status: "success", amount: "~$1,200" },
-    { year: 2023, name: "ARB", status: "success", amount: "~$800" },
-    { year: 2024, name: "ZKS", status: "failed", amount: "0" },
-    { year: 2025, name: "Linea", status: "success", amount: "估算中" },
+    { year: 2022, name: "OP", status: "success" },
+    { year: 2023, name: "ARB", status: "success" },
+    { year: 2024, name: "ZKS", status: "failed" },
+    { year: 2025, name: "Linea", status: "success" },
   ];
-
-  const successRate = Math.round((airdrops.filter(a => a.status === "success").length / airdrops.length) * 100);
 
   const t = {
     zh: {
@@ -25,12 +23,9 @@ export default function Portfolio() {
       tagline: "那场暴跌带走了我的梦",
       about: "实战玩家，专注二级市场、空投策略、DeFi。擅长熊市苟活，牛市起飞。",
       airdropTitle: "空投战绩",
-      successRate: "成功率",
-      totalValue: "预估价值",
+      currentStatus: "当前状态",
       email: "邮箱",
       motto: "少即是多，信息本质就是优势",
-      stats: "统计",
-      currentStatus: "当前状态",
       contactText: "欢迎交流、合作、吐槽",
     },
     en: {
@@ -39,12 +34,9 @@ export default function Portfolio() {
       tagline: "That crash took away my dream",
       about: "Hands-on player focusing on secondary market, airdrops and DeFi. Surviving bear markets, thriving in bull runs.",
       airdropTitle: "Airdrop Records",
-      successRate: "Success Rate",
-      totalValue: "Estimated Value",
+      currentStatus: "Current Status",
       email: "Email",
       motto: "Less is more, information is alpha",
-      stats: "Stats",
-      currentStatus: "Current Status",
       contactText: "Open to collaboration, discussion, or just chatting",
     },
   };
@@ -291,55 +283,47 @@ export default function Portfolio() {
           </div>
         </motion.div>
 
-        {/* Stats Bar */}
+        {/* Current Status Card (占满宽度) */}
         <motion.div
-          className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
+          className={`rounded-2xl p-6 border transition-all duration-300 ${
+            theme === "dark"
+              ? "bg-gradient-to-r from-purple-900/20 via-blue-900/20 to-purple-900/20 border-white/10 hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]"
+              : "bg-gradient-to-r from-purple-50 via-blue-50 to-purple-50 border-gray-200/80 hover:border-purple-300 hover:shadow-xl backdrop-blur-sm"
+          }`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
+          whileHover={{ y: -3 }}
         >
-          <div className={`rounded-xl p-4 text-center ${
-            theme === "dark"
-              ? "bg-gradient-to-br from-purple-900/30 to-purple-700/20 border border-purple-500/20"
-              : "bg-gradient-to-br from-purple-50 to-white border border-purple-100"
-          }`}>
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Trophy size={16} className="text-yellow-500" />
-              <span className="text-xs opacity-70">{L.successRate}</span>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-lg ${
+                theme === "dark" 
+                  ? "bg-purple-500/20" 
+                  : "bg-purple-100"
+              }`}>
+                <Target size={20} className={theme === "dark" ? "text-purple-400" : "text-purple-600"} />
+              </div>
+              <div className="text-left">
+                <div className="text-sm opacity-70">{L.currentStatus}</div>
+                <motion.div 
+                  className="text-lg font-bold"
+                  key={funnyStatus}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {funnyStatus}
+                </motion.div>
+              </div>
             </div>
-            <div className="text-xl sm:text-2xl font-bold">{successRate}%</div>
-          </div>
-
-          <div className={`rounded-xl p-4 text-center ${
-            theme === "dark"
-              ? "bg-gradient-to-br from-blue-900/30 to-blue-700/20 border border-blue-500/20"
-              : "bg-gradient-to-br from-blue-50 to-white border border-blue-100"
-          }`}>
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <TrendingUp size={16} className="text-green-500" />
-              <span className="text-xs opacity-70">{L.totalValue}</span>
+            <div className={`text-xs px-3 py-1 rounded-full ${
+              theme === "dark" 
+                ? "bg-white/10 text-white/70" 
+                : "bg-gray-100 text-gray-600"
+            }`}>
+              {lang === "zh" ? "状态每分钟更新" : "Updates every minute"}
             </div>
-            <div className="text-xl sm:text-2xl font-bold">$2K+</div>
-          </div>
-
-          <div className={`rounded-xl p-4 text-center ${
-            theme === "dark"
-              ? "bg-gradient-to-br from-emerald-900/30 to-emerald-700/20 border border-emerald-500/20"
-              : "bg-gradient-to-br from-emerald-50 to-white border border-emerald-100"
-          }`}>
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Target size={16} className="text-red-500" />
-              <span className="text-xs opacity-70">{L.currentStatus}</span>
-            </div>
-            <motion.div 
-              className="text-sm font-medium"
-              key={funnyStatus}
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {funnyStatus}
-            </motion.div>
           </div>
         </motion.div>
 
@@ -399,22 +383,22 @@ export default function Portfolio() {
               {L.airdropTitle}
             </h2>
             
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {airdrops.map((item, index) => (
                 <motion.div
                   key={item.year}
-                  className={`flex items-center justify-between p-3 rounded-lg transition-all ${
+                  className={`flex items-center justify-between p-4 rounded-xl transition-all ${
                     theme === "dark"
                       ? "hover:bg-white/5"
                       : "hover:bg-gray-50/80"
                   }`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 + index * 0.1 }}
-                  whileHover={{ x: 4 }}
+                  whileHover={{ y: -3 }}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg ${
                       item.status === "success"
                         ? theme === "dark"
                           ? "bg-green-900/30 text-green-400"
@@ -426,19 +410,15 @@ export default function Portfolio() {
                       {item.status === "success" ? "✓" : "✗"}
                     </div>
                     <div>
-                      <div className="font-medium">
-                        {item.year} {item.name} Airdrop
+                      <div className="font-bold text-lg">
+                        {item.year} {item.name}
                       </div>
-                      <div className={`text-xs ${
-                        theme === "dark" 
-                          ? "opacity-60" 
-                          : "text-gray-500"
-                      }`}>
-                        {item.amount}
+                      <div className="text-sm opacity-70">
+                        Airdrop
                       </div>
                     </div>
                   </div>
-                  <div className={`px-2 py-1 rounded text-xs font-medium ${
+                  <div className={`px-3 py-1 rounded-full text-sm font-medium ${
                     item.status === "success"
                       ? theme === "dark"
                         ? "bg-green-900/30 text-green-400 border border-green-700/30"
